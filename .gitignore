@@ -2,7 +2,10 @@
 .env.*
 !.env.example
 .DS_Store
-Thumbs.db
 node_modules/
-.vscode/settings.json
-.phpunit.result.cache
+vendor/
+.phpunit.cache/
+tests/e2e/out/
+tests/e2e/node_modules/
+.claude
+.agents

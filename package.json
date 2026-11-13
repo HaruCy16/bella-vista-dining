@@ -1,11 +1,12 @@
 {
-  "name": "bella-vista-dining",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Stage 1 visual foundation for Bella Vista Dining.",
   "scripts": {
-    "check:js": "node --check assets/js/app.js && node --check assets/js/cart.js && node --check assets/js/menu.js && node --check assets/js/reservations.js",
-    "serve": "php -S 0.0.0.0:3000 router.php"
+    "build:css": "postcss src/input.css -o public/assets/css/app.css",
+    "watch:css": "postcss src/input.css -o public/assets/css/app.css --watch"
   },
-  "packageManager": "pnpm@10.12.4"
+  "devDependencies": {
+    "autoprefixer": "^10.6.2",
+    "postcss": "^8.5.32",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^3.4.19"
+  }
 }

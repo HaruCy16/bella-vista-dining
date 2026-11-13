@@ -1,0 +1,528 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Bella Vista Dining. Tokens live in tailwind.config.js.
+ * Type: Newsreader (display, optical sizes) + the system UI font (body).
+ * Tracking is size-specific: tight on display sizes, neutral on body, slightly open on small text.
+ * Motion: transform/opacity only, ease-out, 100-200ms for feedback; reduced-motion gets none.
+ */
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem; /* header (4.5rem) + 1.5rem, so an anchored heading sits just under the header */
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+  body { @apply m-0 bg-canvas font-sans text-body text-ink antialiased; }
+  body.modal-open { @apply overflow-hidden; }
+  h1, h2, h3, h4 { @apply font-serif font-medium text-ink; font-optical-sizing: auto; text-wrap: balance; }
+  p, li, dd { text-wrap: pretty; }
+  a { @apply text-clay underline-offset-4; }
+  img { @apply max-w-full; }
+  button, a, [role="button"], summary { touch-action: manipulation; }
+  button, .button, summary { -webkit-user-select: none; user-select: none; }
+  input, select, textarea { font-size: 16px; } /* below 16px iOS zooms the page on focus */
+  :focus-visible { @apply rounded outline outline-2 outline-offset-2 outline-pine; }
+  [hidden] { display: none !important; }
+}
+
+@layer components {
+  /* ---------- Shared ---------- */
+  .icon { @apply inline-block h-[1.125em] w-[1.125em] shrink-0; }
+  .wrap { @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8; }
+  .skip-link { @apply fixed left-4 top-3 z-[60] -translate-y-24 rounded-lg bg-ink px-4 py-3 text-sm font-semibold text-white no-underline transition-transform focus-visible:translate-y-0; }
+
+  .display { @apply text-display; }
+  .title { @apply text-title; }
+  .heading-lg { @apply text-heading-lg; }
+  .lede { @apply mt-3 max-w-measure text-lead text-muted; }
+  .small { @apply text-small; }
+  .hint { @apply text-small text-muted; }
+
+  /* Small uppercase section label ("YOUR PARTY", "FROM OUR FARM TO YOUR TABLE") */
+  .label { @apply m-0 text-caption font-bold uppercase tracking-[0.12em] text-pine; }
+  .label-clay { @apply text-clay; }
+  .label-muted { @apply font-medium text-muted; }
+  .label-row { @apply mb-3 mt-7 flex items-center justify-between gap-3; }
+  .eyebrow { @apply mb-3 text-caption font-semibold tracking-label text-clay; }
+  .eyebrow.light { @apply text-cream; }
+
+  .card { @apply rounded-card border border-[rgba(35,37,28,0.07)] bg-paper p-4 shadow-[0_1px_2px_rgba(35,37,28,0.04)] sm:p-5; }
+  .badge { @apply inline-flex items-center whitespace-nowrap rounded-md px-2 py-1 text-caption font-semibold leading-none; }
+  .badge-mint { @apply bg-mint text-pine; }
+  .badge-gold { @apply bg-gold uppercase tracking-label text-ink; }
+  .badge-muted { @apply bg-canvas text-muted; }
+
+  .button { @apply inline-flex min-h-[48px] cursor-pointer items-center justify-center gap-2 rounded-ctl border border-transparent px-5 text-body font-semibold leading-none no-underline transition-[transform,background-color,border-color] duration-150 ease-out active:scale-[0.97] disabled:cursor-wait disabled:opacity-70; }
+  .button-forest { @apply bg-forest text-white hover:bg-[#162b20]; }
+  .button-rust, .button-primary { @apply bg-rust text-white hover:bg-[#a4462f]; }
+  .button-paper { @apply border-line bg-paper text-forest hover:bg-white; }
+  .button-secondary, .button-outline { @apply border-line bg-transparent text-ink hover:border-ink/40; }
+  .button-light { @apply bg-cream text-forest hover:bg-white; }
+  .button-small { @apply min-h-[40px] px-4 text-small; }
+  .button-block { @apply w-full; }
+  .button-split { @apply justify-between; }
+  .text-link { @apply inline-flex items-center gap-1.5 font-semibold text-clay no-underline hover:underline; }
+  .text-button { @apply inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-1 font-sans text-small font-semibold text-pine hover:underline; }
+
+  /* ---------- Header and mobile tab bar ---------- */
+  .site-header { @apply sticky top-0 z-40 border-b border-line bg-canvas/85 backdrop-blur-md backdrop-saturate-150; padding-top: env(safe-area-inset-top, 0px); }
+  .nav { @apply flex h-[72px] items-center justify-center gap-6 lg:justify-start; }
+  .brand { @apply flex items-center gap-3 py-1.5 text-ink no-underline lg:mr-auto; }
+  .brand picture { @apply block shrink-0; }
+  .brand-logo { @apply block max-w-none; }
+  .admin-bar .brand { @apply mr-auto; }
+  .admin-bar .brand span { @apply text-caption font-semibold tracking-label text-muted; }
+  .main-menu { @apply hidden items-center gap-6 lg:flex; }
+  .main-menu a { @apply text-body font-medium text-ink/75 no-underline transition-colors hover:text-ink; }
+  .main-menu a[aria-current="page"] { @apply text-ink underline decoration-clay decoration-2 underline-offset-[6px]; }
+  .nav-cta { @apply hidden lg:inline-flex; }
+  .open-status { @apply hidden items-center gap-2 text-caption font-medium text-muted xl:inline-flex; }
+  .open-status::before { @apply h-2 w-2 rounded-full bg-muted/60; content: ''; }
+  .open-status.is-open { @apply text-olive; }
+  .open-status.is-open::before { @apply bg-olive; box-shadow: 0 0 0 3px rgba(74, 94, 40, 0.18); }
+
+  .tabbar { @apply fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-line bg-paper/95 backdrop-blur-md lg:hidden; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .tabbar a { @apply grid min-h-[60px] place-items-center content-center gap-1 text-caption font-medium text-muted no-underline active:bg-canvas; }
+  .tabbar .icon { @apply h-[22px] w-[22px]; }
+  .tabbar a[aria-current="page"] { @apply font-semibold text-forest; }
+  body.has-tabbar { @apply pb-[calc(60px+env(safe-area-inset-bottom,0px))] lg:pb-0; }
+
+  /* ---------- Forms ---------- */
+  .field { @apply grid gap-1.5; }
+  .field > span, .field-label { @apply text-small font-medium text-ink; }
+  .field input, .field select, .field textarea { @apply min-h-[48px] w-full rounded-ctl border border-line bg-white px-3 text-ink transition-[border-color,box-shadow] duration-150 focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25; }
+  .field input[aria-invalid="true"] { @apply border-danger; }
+  .field-status { @apply m-0 min-h-[1.25rem] text-small text-muted; }
+  .field-status:empty { @apply hidden; }
+  .field-status.is-error { @apply text-danger; }
+  .form-row { @apply grid gap-3 sm:grid-cols-2; }
+  .check-label { @apply mt-1 flex cursor-pointer items-start gap-3 text-small; }
+  .check-label input { @apply mt-0.5 h-5 w-5 shrink-0 accent-[#3A5D4B]; }
+  .form-error { @apply mb-3 flex items-start gap-2 rounded-ctl bg-[#fdecea] px-3 py-2.5 text-small font-medium text-danger-ink; }
+  .form-error .icon { @apply mt-0.5; }
+  .reference { @apply my-5 inline-block rounded-ctl border border-dashed border-clay px-5 py-3 font-mono text-heading font-semibold tracking-label text-ink; -webkit-user-select: all; user-select: all; }
+
+  /* ---------- Sections ---------- */
+  /* Sections carry only bottom padding, so the gap between two sections is one value.
+     A section after a coloured band adds .section-top. */
+  .section { @apply pb-16 lg:pb-20; }
+  .section-top { @apply pt-16 lg:pt-20; }
+  .section-head { @apply mb-8 lg:mb-10; }
+  .section-head .title, .section-head .heading-lg { @apply m-0 mt-2; }
+  .section-head-row { @apply flex flex-wrap items-end justify-between gap-4; }
+
+  /* ---------- Landing: mobile hero card ---------- */
+  .hero-m { @apply pb-10 pt-4 lg:hidden; }
+  .hero-m .label-row { @apply mt-0; }
+  .hero-card { @apply relative overflow-hidden rounded-panel bg-sage; aspect-ratio: 1 / 1.05; max-height: 72svh; width: 100%; }
+  .hero-card img { @apply absolute inset-0 h-full w-full object-cover; }
+  .hero-card::after { @apply absolute inset-0; content: ''; background: linear-gradient(to top, rgba(22, 40, 30, 0.9), rgba(22, 40, 30, 0.25) 55%, transparent 75%); }
+  .hero-card-body { @apply absolute inset-x-0 bottom-0 z-10 p-5; }
+  .hero-card h1 { @apply m-0 mb-5 max-w-[11ch] text-[2.5rem] leading-[1.02] tracking-[-0.02em] text-white; }
+  .hero-m-hours { @apply mt-3 flex items-center gap-2 text-small text-muted; }
+
+  /* ---------- Landing: desktop hero ---------- */
+  .hero-d { @apply hidden items-center gap-14 py-14 lg:grid lg:grid-cols-[1fr_1.1fr]; }
+  .hero-d h1 { @apply m-0 mt-4; }
+  .hero-actions { @apply mt-8 flex flex-wrap gap-3; }
+  .hero-note { @apply m-0 mt-5 text-small text-muted; }
+  .hero-media { @apply m-0 overflow-hidden rounded-panel bg-sage; aspect-ratio: 4 / 3; }
+  .hero-media img { @apply h-full w-full object-cover; }
+
+  .band { @apply hidden bg-forest text-cream lg:block; }
+  .band-list { @apply m-0 flex justify-between gap-6 py-5 text-body; list-style: none; }
+
+  /* About, history */
+  .about { @apply grid items-center gap-8 lg:grid-cols-2 lg:gap-16; }
+  .about.section-top { @apply pt-0 lg:pt-20; } /* on phones it follows the hero card directly */
+  .about-media { @apply hidden lg:block; }
+  .about-media img { @apply aspect-[4/3] w-full rounded-card object-cover; }
+  .about .title { @apply m-0 mt-2; }
+  .about-copy { @apply mt-4 max-w-measure text-muted; }
+  .about .text-link { @apply mt-2; }
+  .history { @apply grid gap-8 border-t border-line pt-10 lg:grid-cols-3 lg:gap-12; }
+  .history h2 { @apply m-0 mt-2 max-w-[14ch]; }
+  .history-year { @apply m-0 font-serif text-heading text-clay; }
+  .history h3 { @apply mb-1 mt-2 font-sans text-body font-semibold; }
+  .history p:not(.history-year):not(.label) { @apply m-0 text-small text-muted; }
+
+  /* Menu highlights: swipe row on phones, three columns from tablet up */
+  .tint { @apply bg-mint; }
+  .dish-grid { @apply -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:px-0; scrollbar-width: none; }
+  .dish-card { @apply m-0 w-[78%] shrink-0 snap-start sm:w-auto; }
+  .dish-card img { @apply aspect-[4/3] w-full rounded-card object-cover; }
+  .dish-card-head { @apply mt-3 flex items-baseline justify-between gap-3; }
+  .dish-card h3 { @apply m-0 text-subheading; }
+  .dish-card-head span { @apply whitespace-nowrap font-semibold; }
+  .dish-card p { @apply m-0 mt-1 text-small text-muted; }
+
+  .preorder { @apply grid items-center gap-6 lg:grid-cols-[1.3fr_1fr] lg:gap-16; }
+  .preorder h2 { @apply m-0 mt-2; }
+  .share-card { @apply flex items-center gap-4 rounded-card border border-line bg-paper p-3 pr-5 text-ink no-underline transition-[transform,border-color] duration-150 ease-out hover:border-pine/40 active:scale-[0.98]; }
+  .share-card img { @apply h-20 w-20 rounded-ctl object-cover; }
+  .share-card span { @apply flex-1; }
+  .share-card strong { @apply block font-serif text-subheading font-medium; }
+  .share-card small { @apply block text-small text-muted; }
+  .share-card .icon { @apply text-pine; }
+
+  .gallery { @apply -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:px-0; scrollbar-width: none; }
+  .gallery img { @apply aspect-[4/3] w-[78%] shrink-0 snap-start rounded-card object-cover sm:w-full; }
+
+  /* Tables */
+  .paper-band { @apply border-y border-line bg-paper; }
+  .paper-band .section-head .title { @apply mt-2; }
+  .table-types { @apply grid gap-4 md:grid-cols-3; }
+  .table-type { @apply grid content-start rounded-card border border-line bg-canvas/50 p-6; }
+  .table-type h3 { @apply m-0 text-heading; }
+  .table-type .capacity { @apply m-0 mt-1 text-small text-muted; }
+  .table-type dl { @apply m-0 mt-5 grid gap-2 border-t border-line pt-4 text-small; }
+  .table-type dl div { @apply flex justify-between gap-4; }
+  .table-type dt { @apply text-muted; }
+  .table-type dd { @apply m-0 text-right font-medium; }
+  .table-type .text-link { @apply mt-5; }
+
+  /* "There's a table for every gathering" quick picker (plain GET form to the booking flow) */
+  .gathering { @apply grid items-start gap-8 lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-10; }
+  .gathering h2 { @apply m-0 mt-2; }
+  .gathering-hours { @apply m-0 mt-4 font-semibold; }
+  .gathering .hint { @apply mt-1; }
+  .gathering fieldset { @apply m-0 min-w-0 border-0 p-0; }
+  .gathering legend { @apply mb-3 p-0; }
+  .gathering-days.card { @apply sm:p-4; }
+  .gathering-days .button { @apply mt-4; }
+
+  /* Policies */
+  .policies { @apply grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16; }
+  .policies h2 { @apply m-0; }
+  .policy-list { @apply m-0 grid gap-0; }
+  .policy-list > div { @apply grid gap-1 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6; }
+  .policy-list dt { @apply font-semibold; }
+  .policy-list dd { @apply m-0 text-muted; }
+
+  /* Visit band and map */
+  .visit { @apply bg-forest pt-16 text-cream lg:pt-20; }
+  .visit h2 { @apply m-0 text-white; }
+  .visit-grid { @apply grid gap-8 lg:grid-cols-2 lg:gap-16; }
+  .visit p { @apply text-cream/90; }
+  .hours-table { @apply w-full border-collapse text-body; }
+  .hours-table th, .hours-table td { @apply border-b border-white/15 py-3 text-left font-normal; }
+  .hours-table td { @apply text-right; }
+  .hours-table tr.is-today th, .hours-table tr.is-today td { @apply font-semibold text-white; }
+  .hours-table tr.is-closed td { @apply text-cream/70; }
+  .location { @apply overflow-hidden rounded-card border border-white/15 bg-forest lg:grid lg:grid-cols-[1fr_20rem]; }
+  .location-stacked { @apply flex flex-col lg:grid-cols-1; }
+  .location-stacked .map-frame { @apply flex-1; }
+  .map-frame { @apply relative bg-sage; aspect-ratio: 4 / 3; }
+  .map-frame iframe { @apply absolute inset-0 h-full w-full border-0; }
+  .location-details { @apply grid content-between gap-6 p-6; }
+  .location-address { @apply m-0 flex gap-3 text-body text-cream; }
+  .location-address .icon { @apply mt-1 text-cream; }
+  .location .button { @apply w-full; }
+  @media (min-width: 1024px) { .map-frame { aspect-ratio: auto; min-height: 22rem; } }
+
+  .cta-band { @apply bg-forest py-14 text-cream lg:py-16; }
+  .cta-band-inner { @apply flex flex-col justify-between gap-6 lg:flex-row lg:items-center; }
+  .cta-band h2 { @apply m-0 text-white; }
+  .cta-band p { @apply m-0 mt-2 text-cream/85; }
+
+  /* ---------- Footer ---------- */
+  .footer { @apply mt-0 border-t border-line py-12 text-body text-muted; }
+  .cta-band + .footer, main:has(> .cta-band:last-child) + .footer { @apply border-t-0; }
+  .footer-grid { @apply grid gap-8 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]; }
+  .footer h2 { @apply m-0 mb-3 font-sans text-small font-semibold text-ink; }
+  .footer a { @apply block py-1 text-muted no-underline hover:text-ink; }
+  .footer .brand { @apply flex text-ink; }
+  .footer p { @apply m-0; }
+  .footer-bottom { @apply mt-10 flex flex-wrap justify-between gap-2 border-t border-line pt-6 text-small; }
+
+  /* ---------- Calendar week, time slots, party size (booking flow + landing picker) ---------- */
+  .cal-head { @apply flex items-center justify-between gap-3; }
+  .cal-nav { @apply flex gap-1; }
+  .cal-nav button { @apply grid h-9 w-9 cursor-pointer place-items-center rounded-full border-0 bg-transparent text-ink active:bg-canvas disabled:cursor-default disabled:opacity-30; }
+  .cal-week { @apply mt-3 grid grid-cols-7 gap-1; }
+  .cal-day { @apply grid min-h-[64px] min-w-0 cursor-pointer place-items-center content-center gap-1 rounded-ctl border-0 bg-transparent px-0 py-2 font-sans text-ink transition-[transform,background-color] duration-150 ease-out active:scale-[0.95]; }
+  .cal-day small { @apply text-caption text-muted; }
+  .cal-day b { @apply font-serif text-subheading font-medium leading-none; }
+  .cal-day.is-closed { @apply bg-canvas; }
+  .cal-day.is-closed b { @apply line-through; }
+  .cal-day:disabled { @apply cursor-not-allowed opacity-40 active:scale-100; }
+  .cal-day[aria-checked="true"], .cal-day:has(input:checked) { @apply bg-pine text-white; }
+  .cal-day[aria-checked="true"] small, .cal-day:has(input:checked) small { @apply text-white/80; }
+  .cal-day input, .slot input { @apply sr-only; }
+  .cal-day:has(input:focus-visible), .slot:has(input:focus-visible) { @apply outline outline-2 outline-offset-2 outline-pine; }
+  .cal-note { @apply m-0 mt-3 text-caption text-muted; }
+
+  .slot-grid { @apply grid grid-cols-3 gap-2; }
+  .slot { @apply grid min-h-[48px] cursor-pointer place-items-center rounded-ctl border border-[rgba(35,37,28,0.08)] bg-paper px-1 font-sans text-small font-medium text-ink transition-[transform,background-color] duration-150 ease-out active:scale-[0.97]; }
+  .slot[aria-checked="true"], .slot:has(input:checked) { @apply border-pine bg-pine text-white; }
+  .slot:disabled { @apply cursor-not-allowed opacity-40 active:scale-100; }
+
+  .party { @apply flex items-center justify-between sm:p-2; padding: 0.5rem; }
+  .party button { @apply grid h-11 w-11 cursor-pointer place-items-center rounded-ctl border-0 bg-transparent text-pine active:bg-canvas disabled:cursor-default disabled:opacity-30; }
+  .party output { @apply text-lead font-semibold text-pine; }
+
+  /* ---------- Booking flow ---------- */
+  .appbar { @apply sticky top-0 z-30 flex h-14 items-center gap-2 bg-canvas/90 px-2 backdrop-blur-md lg:hidden; box-sizing: content-box; padding-top: env(safe-area-inset-top, 0px); }
+  .appbar-back, .appbar-home { @apply grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full border-0 bg-transparent text-ink active:bg-paper; }
+  .appbar-back .icon { @apply h-5 w-5; }
+  .appbar-home { @apply text-pine; }
+  .appbar-title { @apply m-0 min-w-0 flex-1 truncate font-serif text-subheading font-medium; }
+
+  .flow { @apply pb-[calc(9rem+env(safe-area-inset-bottom,0px))] lg:pb-20; }
+  .flow-wrap { @apply lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-12 lg:pt-10 xl:grid-cols-[minmax(0,1fr)_24rem]; }
+  .flow-main { @apply mx-auto max-w-[40rem] lg:mx-0 lg:max-w-none; }
+  .flow-steps { @apply m-0 hidden list-none gap-2 p-0 text-caption font-semibold uppercase tracking-[0.12em] text-muted lg:flex; }
+  .flow-steps li + li::before { @apply mr-2 text-line; content: '/'; color: rgba(35, 37, 28, 0.25); }
+  .flow-steps li.is-done { @apply text-pine; }
+  .flow-steps li[aria-current="step"] { @apply text-clay; }
+  .flow-heading { @apply sr-only lg:not-sr-only lg:m-0 lg:mt-3 lg:text-title; }
+  .flow-heading:focus { outline: none; }
+  .flow-heading-mobile { @apply not-sr-only m-0 mt-2 text-heading-lg; }
+  .flow-lede { @apply m-0 mt-2 max-w-measure text-body text-muted; }
+  .flow-lede-desktop { @apply hidden lg:block; }
+  .flow-note { @apply m-0 mt-5 flex gap-2 text-small text-muted; }
+  .flow-note .icon { @apply mt-0.5; }
+  .flow-step .cal-card { @apply mt-6; }
+  .flow-step > .label:not(:first-child) { @apply mb-3 mt-7; }
+
+  .context-line { @apply m-0 mt-1 flex items-center gap-2 text-small text-muted lg:mt-3; }
+  .context-pill { @apply m-0 mt-4 flex items-center gap-2 rounded-ctl bg-mint px-3 py-2.5 text-small font-medium text-pine lg:mt-5; }
+
+  .seat-cards { @apply mt-4 grid gap-3; }
+  .seat-card { @apply border-2 border-transparent transition-[border-color] duration-150; }
+  .seat-card.is-selected { @apply border-pine; }
+  .seat-card.is-disabled .seat-copy, .seat-card.is-disabled h2 { @apply opacity-60; }
+  .seat-card-head { @apply flex items-start justify-between gap-3; }
+  .seat-card h2 { @apply m-0 text-heading; }
+  .seat-copy { @apply m-0 mt-2 text-small; }
+  .seat-fine { @apply m-0 mt-2 text-caption text-muted; }
+  .seat-chips { @apply mt-4 flex flex-wrap gap-2; }
+  .seat-chips[aria-busy="true"] { @apply opacity-60; }
+  .seat-chip { @apply inline-flex min-h-[44px] min-w-[3.5rem] flex-1 basis-0 cursor-pointer items-center justify-center gap-1.5 rounded-ctl border-0 bg-canvas px-3 font-sans text-small font-semibold text-ink transition-[transform,background-color] duration-150 ease-out active:scale-[0.96]; }
+  .seat-chips-wide .seat-chip { @apply flex-none basis-auto; }
+  .seat-chip .seat-check { @apply hidden; }
+  .seat-chip[aria-checked="true"] { @apply bg-pine text-white; }
+  .seat-chip[aria-checked="true"] .seat-check { @apply inline-block; }
+  .seat-chip:disabled { @apply cursor-not-allowed text-muted opacity-50 active:scale-100; }
+  .seat-chip.is-booked span { @apply line-through; }
+  .seat-note { @apply m-0 mt-2 text-caption text-muted; }
+  .seat-note:empty { @apply hidden; }
+  .seat-note.is-error { @apply text-danger; }
+
+  /* Menu browser: category tabs + dish rows (booking flow and menu page) */
+  .menu-browser { @apply mt-4; }
+  .menu-tabs { @apply sticky z-20 -mx-4 flex gap-2 overflow-x-auto bg-canvas px-4 py-2 sm:mx-0 sm:px-0; top: var(--sticky-top, 72px); scrollbar-width: none; }
+  .menu-tabs::-webkit-scrollbar, .dish-grid::-webkit-scrollbar, .gallery::-webkit-scrollbar { display: none; }
+  .menu-tab { @apply min-h-[40px] shrink-0 cursor-pointer rounded-ctl border border-[rgba(35,37,28,0.08)] bg-paper px-4 font-sans text-small font-semibold text-ink transition-colors duration-150; }
+  .menu-tab[aria-selected="true"] { @apply border-pine bg-pine text-white; }
+  .menu-panel-title { @apply m-0 mb-3 mt-4 text-heading; }
+  .menu-rows { @apply m-0 grid list-none gap-2.5 p-0; }
+  .menu-row { @apply flex min-h-[104px] overflow-hidden rounded-card border border-[rgba(35,37,28,0.07)] bg-paper transition-[border-color] duration-150; }
+  .menu-row.is-selected { @apply border-pine/40; }
+  .menu-row img { @apply w-24 shrink-0 self-stretch bg-sage object-cover sm:w-28; height: auto; }
+  .menu-row-body { @apply flex min-w-0 flex-1 flex-col p-3 sm:p-4; }
+  .menu-row h3 { @apply m-0 font-sans text-body font-semibold leading-snug; }
+  .menu-row p { @apply m-0 mt-0.5 line-clamp-2 text-caption text-muted; }
+  .menu-row-foot { @apply mt-auto flex items-center justify-between gap-3 pt-2; }
+  .menu-row-price { @apply text-small font-semibold; }
+
+  .qty { @apply inline-flex items-center gap-1; }
+  .qty button { @apply grid h-9 w-9 cursor-pointer place-items-center rounded-lg border border-line bg-paper p-0 font-sans text-body text-ink active:bg-canvas disabled:cursor-default disabled:opacity-35; }
+  .qty button .icon { @apply h-4 w-4; }
+  .qty output { @apply grid h-9 min-w-[2.25rem] place-items-center rounded-lg bg-mint px-1 text-small font-semibold text-pine; }
+
+  .review-card { @apply p-0 sm:p-0; }
+  .review-list { @apply m-0 list-none p-0; }
+  .review-list li { @apply flex items-center justify-between gap-3 border-b border-line px-4 py-3.5 last:border-b-0 sm:px-5; }
+  .review-list strong { @apply block text-body font-semibold; }
+  .review-list small { @apply block text-caption text-muted; }
+  .review-empty { @apply grid justify-items-start gap-3 p-5 text-small text-muted; }
+  .review-empty p { @apply m-0; }
+  .totals-card { @apply mt-3; }
+  .totals { @apply m-0 grid gap-2 text-small; }
+  .totals > div { @apply flex justify-between gap-4; }
+  .totals dt { @apply text-muted; }
+  .totals dd { @apply m-0 text-right font-semibold; }
+  .totals .totals-total { @apply mt-1 border-t border-line pt-2.5 text-body; }
+  .totals .totals-total dt { @apply font-semibold text-ink; }
+  .totals-note { @apply m-0 mt-2 text-caption text-muted; }
+  .totals-note:empty { @apply hidden; }
+  [data-minimum-status] { @apply mt-3; }
+
+  .checkout-form { @apply mt-5 grid gap-3; }
+  .checkout-form > .label { @apply mt-4; }
+  .pay-list { @apply grid gap-2; }
+  .pay-row { @apply flex cursor-pointer items-center gap-3 rounded-ctl border border-[rgba(35,37,28,0.08)] bg-paper px-3.5 py-3 transition-colors duration-150 has-[:checked]:border-pine/40 has-[:checked]:bg-mint; }
+  .pay-row input { @apply h-5 w-5 shrink-0 accent-[#3A5D4B]; }
+  .pay-row > span { @apply flex-1 text-small font-semibold; }
+  .pay-row small { @apply block text-caption font-normal text-muted; }
+  .pay-row b { @apply text-small font-semibold text-pine; }
+  .policy-bullets { @apply m-0 grid gap-1 pl-5 text-small text-muted; }
+
+  .flow-aside { @apply lg:sticky lg:top-[calc(72px+2.5rem)] lg:grid lg:gap-4; }
+  .summary-card { @apply hidden lg:block; }
+  .summary-card h2 { @apply m-0 mb-4 text-heading; }
+  .summary-items { @apply m-0 mt-4 grid list-none gap-1.5 border-t border-line p-0 pt-4 text-small; }
+  .summary-items:empty { @apply hidden; }
+  .summary-items li { @apply flex justify-between gap-4; }
+  .summary-rows dd { @apply font-medium; }
+  .summary-card [data-summary-totals] { @apply mt-4 border-t border-line pt-4; }
+  .flow-action { @apply fixed inset-x-0 bottom-0 z-30 border-t border-line bg-canvas/95 px-4 pt-3 backdrop-blur-md lg:static lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none; padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)); }
+  .flow-action > * { @apply mx-auto max-w-[40rem] lg:max-w-none; }
+  .flow-meta { @apply m-0 mb-2 text-center text-caption text-muted lg:text-left; }
+  .flow-cta { @apply flex min-h-[52px] w-full cursor-pointer items-center justify-between gap-3 rounded-ctl border-0 bg-forest px-5 font-sans text-body font-semibold text-white transition-[transform,background-color] duration-150 ease-out hover:bg-[#162b20] active:scale-[0.98] disabled:cursor-wait disabled:opacity-70; }
+  .flow-action .form-error { @apply mb-2; }
+  @media (max-width: 1023px) {
+    body.is-flow .site-header, body.is-flow .footer { display: none; }
+    body.is-flow { --sticky-top: calc(3.5rem + env(safe-area-inset-top, 0px)); }
+    .flow-action { @apply lg:pb-0; }
+  }
+
+  /* ---------- Menu page ---------- */
+  .menu-page { @apply pb-16 pt-8 lg:pb-20 lg:pt-12; }
+  .menu-page-head { @apply flex flex-col justify-between gap-6 lg:flex-row lg:items-end; }
+  .menu-page-head h1 { @apply m-0 mt-2; }
+  .menu-page .menu-rows { @apply md:grid-cols-2 md:gap-3; }
+  .menu-page .menu-browser { @apply mt-8; }
+  .menu-sample-note { @apply mt-6; }
+
+  /* ---------- Confirmation ---------- */
+  .confirm { @apply max-w-[960px] py-8 lg:py-14; }
+  .confirm-head { @apply grid justify-items-center text-center; }
+  .confirm-badge { @apply mb-4 grid h-14 w-14 place-items-center rounded-full bg-mint text-pine; }
+  .confirm-badge .icon { @apply h-7 w-7; }
+  .confirm-head h1 { @apply m-0 mt-2; }
+  .confirm-head .lede { @apply mx-auto text-body; }
+  .confirm-grid { @apply mt-8 grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]; }
+  .confirm-main { @apply grid gap-4; }
+  .confirm-card-head { @apply flex items-center justify-between gap-3; }
+  .reference-code { @apply m-0 font-mono text-small font-semibold tracking-[0.15em] text-pine; -webkit-user-select: all; user-select: all; }
+  .confirm-card h2:not(.label) { @apply mb-4 mt-3 text-heading text-pine; }
+  .confirm-card > .label { @apply mb-4; }
+  .confirm-section .label-row { @apply mt-2; }
+  .confirm-items { @apply m-0 text-body; }
+  .arrive-note { @apply rounded-card bg-mint p-4 text-small; }
+  .arrive-note strong { @apply block text-pine; }
+  .arrive-note p { @apply m-0 mt-1 text-muted; }
+  .confirm-actions { @apply mt-5 grid gap-2; }
+
+  /* ---------- Inner pages (about, visit, contact) ---------- */
+  .inner-page { @apply min-h-[60vh]; }
+  .inner-hero { @apply mx-auto max-w-page px-4 pb-10 pt-14 sm:px-6 lg:px-8 lg:pb-14 lg:pt-20; }
+  .inner-hero h1 { @apply m-0 max-w-[18ch] text-display; }
+  .inner-hero h1 em { @apply not-italic; }
+  .inner-hero > p:last-child { @apply mt-5 max-w-measure text-lead text-muted; }
+  .content-panel { @apply mx-auto grid max-w-page items-center gap-10 px-4 pb-24 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8; }
+  .content-image img { @apply aspect-[4/5] w-full rounded-card object-cover; }
+  .content-copy h2, .visit-page-content h2, .contact-page-content h2 { @apply m-0 text-title; }
+  .content-copy > p:not(.eyebrow), .contact-page-content > p:not(.eyebrow) { @apply max-w-measure text-muted; }
+  .visit-page-content { @apply mx-auto grid max-w-page gap-4 px-4 pb-24 sm:px-6 lg:grid-cols-2 lg:px-8; }
+  .visit-page-content > div:first-child { @apply rounded-card bg-grove p-8 text-cream lg:p-12; }
+  .visit-page-content > div:first-child h2 { @apply text-white; }
+  .hours { @apply mt-8 border-t border-white/15; }
+  .hours div { @apply flex justify-between border-b border-white/15 py-3; }
+  .hours span { @apply text-cream/80; }
+  .hours strong { @apply font-normal text-white; }
+  .map-placeholder { @apply flex min-h-[320px] flex-col items-center justify-center gap-2 rounded-card border border-dashed border-line bg-paper p-8 text-center text-muted; }
+  .map-placeholder p { @apply m-0 font-serif text-heading text-ink; }
+  .map-pin { @apply text-clay; }
+  .map-pin .icon { @apply h-8 w-8; }
+  .contact-page-content { @apply mx-auto max-w-page px-4 pb-24 sm:px-6 lg:px-8; }
+  .contact-page-content > p:not(.eyebrow) { @apply mb-7 mt-4; }
+
+  /* ---------- Status chips and notices ---------- */
+  .chip { @apply inline-flex items-center rounded-full border border-line bg-paper px-2.5 py-1 text-caption font-semibold leading-none text-ink; }
+  .chip-ok { @apply border-[#c9d4b5] bg-[#eef2e4] text-olive; }
+  .chip-warn { @apply border-[#ecd2a8] bg-[#fbf1df] text-warn-ink; }
+  .chip-busy { @apply border-[#e6c2b6] bg-[#fbece6] text-clay; }
+  .chip-muted { @apply bg-canvas text-muted; }
+  .notice { @apply my-6 flex items-start gap-2 rounded-ctl border border-line bg-paper px-4 py-3; }
+  .notice .icon { @apply mt-0.5; }
+  .notice-success { @apply border-[#c9d4b5] bg-[#eef2e4] text-ok-ink; }
+  .notice-error { @apply border-[#f1c4bf] bg-[#fdecea] text-danger-ink; }
+  .button-danger { @apply bg-danger text-white hover:bg-[#912018]; }
+
+  /* ---------- Manage booking page ---------- */
+  .booking-page { @apply max-w-[760px] py-12 lg:py-16; }
+  .lookup-form { @apply mt-8 grid gap-3 rounded-card border border-line bg-paper p-5 sm:grid-cols-[1fr_1.4fr_auto] sm:items-end; }
+  .booking-card { @apply mt-8 grid gap-4 rounded-card border border-line bg-paper p-5 sm:p-7; }
+  .booking-card-head { @apply flex items-start justify-between gap-4; }
+  .booking-card .reference { @apply my-1; }
+  .booking-when { @apply m-0 font-serif text-heading leading-snug; }
+  .booking-items { @apply m-0 grid gap-1 border-y border-line p-0 py-3; list-style: none; }
+  .booking-items li { @apply flex justify-between gap-4 text-body; }
+  .money { @apply m-0 grid gap-1.5 text-body; }
+  .money > div { @apply flex justify-between gap-4; }
+  .money dt { @apply text-muted; }
+  .money dd { @apply m-0 text-right font-medium; }
+  .booking-actions { @apply flex flex-wrap gap-3 border-t border-line pt-4; }
+  .cancel-box { @apply grid justify-items-start gap-3 border-t border-line pt-4; }
+  .cancel-box .text-link { @apply cursor-pointer border-0 bg-transparent p-0 font-sans text-body; }
+
+  /* ---------- Sandbox checkout ---------- */
+  .mock-pay { @apply grid min-h-screen place-items-center bg-[#eef0f3] p-4 font-sans; }
+  .mock-card { @apply w-full max-w-[420px] rounded-panel bg-white p-7 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.25)]; }
+  .mock-card h1 { @apply mb-1 mt-4 font-sans text-heading font-semibold; }
+  .mock-amount { @apply my-5 font-sans text-title font-semibold; }
+
+  /* ---------- Admin ---------- */
+  .admin, .admin-auth { @apply bg-[#f3f1ec]; }
+  .admin-auth { @apply grid min-h-screen place-items-center p-4; }
+  .admin-auth-card { @apply w-full max-w-[400px] rounded-panel border border-line bg-paper p-7; }
+  .admin-bar { @apply sticky top-0 z-20 border-b border-line bg-paper; }
+  .admin-bar-inner { @apply flex flex-wrap items-center gap-x-6 gap-y-2 py-3; }
+  .admin-tabs { @apply order-3 flex w-full gap-1 overflow-x-auto md:order-none md:w-auto; }
+  .admin-tabs button { @apply inline-flex min-h-[40px] cursor-pointer items-center gap-2 whitespace-nowrap rounded-ctl border-0 bg-transparent px-3.5 text-body font-medium text-muted; }
+  .admin-tabs button[aria-selected="true"] { @apply bg-ink text-white; }
+  .admin-tabs .count:not(:empty) { @apply rounded-full bg-rust px-2 py-0.5 text-caption text-white; }
+  .admin-user { @apply ml-auto flex items-center gap-4 text-small text-muted; }
+  .admin-user .text-link { @apply cursor-pointer border-0 bg-transparent p-0 font-sans text-small; }
+  .admin-main { @apply py-8; }
+  .admin-status { @apply mb-4 mt-0 text-caption text-muted; }
+  .admin-h { @apply mb-4 mt-0 font-sans text-subheading font-semibold tracking-normal; }
+  .board { @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5; }
+  .board-card { @apply rounded-card border border-line bg-paper p-4; border-top-width: 4px; }
+  .board-card.status-available { border-top-color: #4A5E28; }
+  .board-card.status-reserved { border-top-color: #c9862b; }
+  .board-card.status-occupied { border-top-color: #B5523C; }
+  .board-card.status-clean-up { border-top-color: #8a8c7d; }
+  .board-card-head { @apply flex items-center justify-between gap-2 text-lead; }
+  .board-card select { @apply min-h-[40px]; }
+  .table-scroll { @apply overflow-x-auto rounded-card border border-line bg-paper; }
+  .data-table { @apply w-full border-collapse text-body; }
+  .data-table th { @apply border-b border-line px-4 py-3 text-left text-caption font-semibold text-muted; }
+  .data-table td { @apply border-b border-line px-4 py-3 align-top; }
+  .data-table tr:last-child td { @apply border-b-0; }
+  .queue { @apply grid gap-3 md:grid-cols-2 xl:grid-cols-3; }
+  .ticket { @apply grid gap-2 rounded-card border border-line bg-paper p-4; }
+  .ticket-preparing { @apply border-clay; }
+  .ticket-served { @apply opacity-70; }
+  .ticket-head { @apply flex items-center justify-between; }
+  .ticket-table { @apply text-subheading; }
+  .ticket-items { @apply m-0 grid gap-1 p-0 text-body font-medium; list-style: none; }
+  .ticket-actions { @apply flex flex-wrap gap-2 pt-1; }
+  .stats { @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-4; }
+  .stat { @apply rounded-card border border-line bg-paper p-5; }
+  .stat-label { @apply m-0 text-small font-medium text-muted; }
+  .stat-value { @apply m-0 mt-1 font-serif text-heading-lg leading-tight; }
+
+
+  /* ---------- Reveal on scroll (only when JS runs; none with reduced motion) ---------- */
+  .js .reveal { @apply translate-y-4 opacity-0 transition duration-500 ease-out; }
+  .js .reveal.visible { @apply translate-y-0 opacity-100; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  .js .reveal { @apply translate-y-0 opacity-100; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header, .tabbar, .appbar, .flow-action { @apply bg-canvas backdrop-blur-none; }
+}

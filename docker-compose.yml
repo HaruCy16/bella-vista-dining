@@ -1,0 +1,79 @@
+# Bella Vista Dining - local development stack.
+# Works from a clean clone without a .env file (defaults below); copy
+# .env.example to .env to override them. Development credentials only.
+
+services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      TZ: Asia/Manila
+      APP_ENV: ${APP_ENV:-development}
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-bella_vista}
+      DB_USER: ${DB_USER:-bella}
+      DB_PASSWORD: ${DB_PASSWORD:-bella_dev_password}
+      APP_URL: ${APP_URL:-}
+      GOOGLE_MAPS_EMBED_API_KEY: ${GOOGLE_MAPS_EMBED_API_KEY:-}
+      PAYMENT_PROVIDER: ${PAYMENT_PROVIDER:-mock}
+      PAYMONGO_SECRET_KEY: ${PAYMONGO_SECRET_KEY:-}
+      PAYMONGO_WEBHOOK_SECRET: ${PAYMONGO_WEBHOOK_SECRET:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    environment:
+      TZ: Asia/Manila
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_dev_password}
+      MYSQL_DATABASE: ${DB_NAME:-bella_vista}
+      MYSQL_USER: ${DB_USER:-bella}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-bella_dev_password}
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "${DB_HOST_PORT:-3306}:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+      # Runs only when db-data is empty. Later schema changes go in database/migrations/.
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./docker/mysql/03-test-database.sh:/docker-entrypoint-initdb.d/03-test-database.sh:ro
+    healthcheck:
+      # TCP (127.0.0.1) is off while the init scripts run, so "healthy" means seeded.
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    ports:
+      - "${PMA_PORT:-8081}:80"
+    environment:
+      TZ: Asia/Manila
+      PMA_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Tailwind build. The compiled CSS is committed, so this only runs on demand:
+  #   docker compose run --rm assets                      (one build)
+  #   docker compose run --rm assets npm run watch:css    (rebuild on change)
+  assets:
+    image: node:20-alpine
+    profiles: ["assets"]
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    entrypoint: ["sh", "-c", "npm ci --no-audit --no-fund && exec \"$$@\"", "--"]
+    command: ["npm", "run", "build:css"]
+
+volumes:
+  db-data:

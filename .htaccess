@@ -1,0 +1,16 @@
+# The web root is the project root (shared hosting cannot change it), so
+# deny everything that is not meant to be public. Docker enables this file
+# through docker/apache/bella-vista.conf.
+
+Options -Indexes
+
+RewriteEngine On
+
+# Dotfiles and dot-folders: .env, .git/, .htaccess, .gitignore ...
+RewriteRule (^|/)\. - [F,L]
+
+# Private folders (PHP still require()s them from disk).
+RewriteRule ^(database|includes|src|templates|tests|scripts|docker|sketch|vendor|node_modules)(/|$) - [F,L]
+
+# Project and tooling files in the root.
+RewriteRule ^(Dockerfile|docker-compose\.yml|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml(\.dist)?|tailwind\.config\.js|postcss\.config\.js|[^/]+\.(md|drawio|xlsx|sql|log))$ - [F,L]
