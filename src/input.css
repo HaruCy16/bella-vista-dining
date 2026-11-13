@@ -451,8 +451,9 @@
   .inner-hero h1 { @apply m-0 max-w-[18ch] text-display; }
   .inner-hero h1 em { @apply not-italic; }
   .inner-hero > p:last-child { @apply mt-5 max-w-measure text-lead text-muted; }
-  .content-panel { @apply mx-auto grid max-w-page items-center gap-10 px-4 pb-24 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8; }
+  .content-panel { @apply mx-auto grid max-w-page items-center gap-10 px-4 pb-16 lg:pb-20 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8; }
   .content-image img { @apply aspect-[4/5] w-full rounded-card object-cover; }
+  .about-map .section-head .title { @apply m-0; }
   .content-copy h2, .visit-page-content h2, .contact-page-content h2 { @apply m-0 text-title; }
   .content-copy > p:not(.eyebrow), .contact-page-content > p:not(.eyebrow) { @apply max-w-measure text-muted; }
   .visit-page-content { @apply mx-auto grid max-w-page gap-4 px-4 pb-24 sm:px-6 lg:grid-cols-2 lg:px-8; }

@@ -24,6 +24,6 @@
         </nav>
     <?php endif; ?>
 
-    <script src="/public/assets/js/main.js?v=20261114b"></script>
+    <script src="/public/assets/js/main.js?v=20261114c"></script>
 </body>
 </html>

@@ -3617,7 +3617,7 @@ video {
   gap: 2.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-bottom: 6rem;
+  padding-bottom: 4rem;
 }
   @media (min-width: 640px) {
 
@@ -3633,6 +3633,7 @@ video {
     gap: 4rem;
     padding-left: 2rem;
     padding-right: 2rem;
+    padding-bottom: 5rem;
   }
 }
   .content-image img {
@@ -3641,6 +3642,9 @@ video {
   border-radius: 1rem;
   -o-object-fit: cover;
      object-fit: cover;
+}
+  .about-map .section-head .title {
+  margin: 0px;
 }
   .content-copy h2, .visit-page-content h2, .contact-page-content h2 {
   margin: 0px;

@@ -1,5 +1,5 @@
 <?php
-/* Map + address + directions. Used on the landing page and the Visit page. */
+/* Map + address + directions. Used on the About and Visit pages. */
 ?>
 <div class="location<?= !empty($locationStacked) ? ' location-stacked' : '' ?>">
     <div class="map-frame">

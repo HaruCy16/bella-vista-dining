@@ -252,5 +252,5 @@ require __DIR__ . '/../includes/header.php';
     </div>
 </main>
 <script>window.BV_RESERVE = <?= json_encode($config, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script>
-<script src="/public/assets/js/reserve.js?v=20261114b" defer></script>
+<script src="/public/assets/js/reserve.js?v=20261114c" defer></script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>
