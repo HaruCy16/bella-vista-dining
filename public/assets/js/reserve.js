@@ -373,6 +373,7 @@
         clearError();
         renderAll();
         if (step === 'seating') loadAvailability();
+        if (step === 'menu') document.dispatchEvent(new CustomEvent('bv:menu-shown'));
         if (focus) {
             window.scrollTo({ top: 0 });
             $(`[data-step="${step}"] .flow-heading`)?.focus({ preventScroll: true });

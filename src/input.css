@@ -528,11 +528,28 @@
   /* ---------- Reveal on scroll (only when JS runs; none with reduced motion) ---------- */
   .js .reveal { @apply translate-y-4 opacity-0 transition duration-500 ease-out; }
   .js .reveal.visible { @apply translate-y-0 opacity-100; }
+
+  /* Staggered entrances. --i is set by main.js (capped, so long lists never wait).
+     Transform + opacity only; ease-out so items arrive quickly and settle. */
+  .js .menu-panel.is-entering .menu-row,
+  .js .stagger.visible > * { animation: rise 460ms cubic-bezier(0.23, 1, 0.32, 1) both; animation-delay: calc(var(--i, 0) * 45ms); }
+  .js .stagger:not(.visible) > * { opacity: 0; }
+  .js .menu-tab[aria-selected="true"] { animation: tab-pop 220ms cubic-bezier(0.23, 1, 0.32, 1); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes tab-pop {
+  from { transform: scale(0.94); }
+  to { transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
   .js .reveal { @apply translate-y-0 opacity-100; }
+  .js .stagger > *, .js .menu-panel .menu-row, .js .menu-tab { animation: none !important; opacity: 1 !important; }
 }
 
 @media (prefers-reduced-transparency: reduce) {
