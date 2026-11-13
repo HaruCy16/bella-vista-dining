@@ -60,7 +60,7 @@
     /* ---------- Rendering ---------- */
     const chip = (text, tone = '') => el('span', { class: `chip ${tone}` }, text);
     const tone = (status) => ({ Available: 'chip-ok', Reserved: 'chip-warn', Occupied: 'chip-busy', 'Clean-up': 'chip-muted',
-        Confirmed: 'chip-ok', Pending: 'chip-warn', 'Checked-in': 'chip-busy', Completed: 'chip-muted', Cancelled: 'chip-muted', 'No-show': 'chip-muted',
+        Confirmed: 'chip-ok', Pending: 'chip-warn', 'Checked-in': 'chip-busy', Completed: 'chip-muted', Cancelled: 'chip-danger', 'No-show': 'chip-muted',
         Preparing: 'chip-busy', Served: 'chip-ok' }[status] ?? '');
 
     function renderBoard(board) {

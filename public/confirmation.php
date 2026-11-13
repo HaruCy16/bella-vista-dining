@@ -28,7 +28,7 @@ $arriveBy = BookingRules::graceEndsAt($start);
 $firstName = strtok($booking['name'], ' ') ?: $booking['name'];
 $isVip = str_starts_with($booking['table_id'], 'VIP');
 $tableName = $isVip ? 'VIP Room ' . substr($booking['table_id'], 3) : $booking['table_type'] . ' ' . $booking['table_id'];
-$statusClass = ['Confirmed' => 'badge-mint', 'Pending' => 'badge-gold'][$booking['status']] ?? 'badge-muted';
+$statusClass = ['Confirmed' => 'badge-mint', 'Pending' => 'badge-butter'][$booking['status']] ?? 'badge-muted';
 $paymentLabel = [
     'On-site' => 'Pay at the restaurant',
     'Unpaid' => 'Awaiting online payment',
@@ -76,7 +76,7 @@ require __DIR__ . '/../includes/header.php';
             <section class="confirm-section" aria-labelledby="confirm-preorder">
                 <div class="label-row">
                     <h2 class="label" id="confirm-preorder">Your pre-order</h2>
-                    <?php if ($booking['items']): ?><span class="badge badge-gold">Scheduled · <?= e(Config::displayTime($booking['start_time'])) ?></span><?php endif; ?>
+                    <?php if ($booking['items']): ?><span class="badge badge-butter">Scheduled · <?= e(Config::displayTime($booking['start_time'])) ?></span><?php endif; ?>
                 </div>
                 <?php if ($booking['items']): ?>
                     <p class="confirm-items"><?= e(implode(' · ', array_map(static fn (array $i): string => $i['quantity'] . ' × ' . $i['name'], $booking['items']))) ?></p>

@@ -116,7 +116,7 @@ require __DIR__ . '/includes/header.php';
                 </div>
                 <a class="button button-paper button-small" href="/public/menu.php">View menu &amp; preorder <?= icon('arrow-up-right') ?></a>
             </div>
-            <div class="dish-grid reveal stagger">
+            <div class="dish-grid reveal stagger" tabindex="0" role="region" aria-label="Kitchen favourites">
                 <?php foreach ($dishes as $dish): ?>
                     <article class="dish-card">
                         <img src="<?= e(menu_image($dish['image'])) ?>" alt="<?= e($dish['name']) ?>" loading="lazy" width="720" height="540">
@@ -139,7 +139,7 @@ require __DIR__ . '/includes/header.php';
             <h2 class="title" id="gallery-title">A little taste of the good life.</h2>
             <p class="label label-muted">The Bella Vista table</p>
         </div>
-        <div class="gallery reveal stagger">
+        <div class="gallery reveal stagger" tabindex="0" role="region" aria-label="Photo gallery">
             <?php foreach ($gallery as $i => $photo): ?>
                 <img src="<?= e(venue_image('gallery-' . ($i + 1), $photo['image'])) ?>" alt="<?= e($photo['name']) ?> at Bella Vista" loading="lazy" width="720" height="540">
             <?php endforeach; ?>
