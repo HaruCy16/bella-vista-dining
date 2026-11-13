@@ -1,0 +1,533 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-13T21:11:04Z",
+  "title": "Design System: Bella Vista Dining",
+  "extensions": {
+    "colorMeta": {
+      "forest": {
+        "role": "primary",
+        "displayName": "Estate Forest",
+        "canonical": "#203F32",
+        "tonalRamp": [
+          "#1F2E27",
+          "#335446",
+          "#457C65",
+          "#55A684",
+          "#7EB89F",
+          "#A6C9BB",
+          "#CCDED6",
+          "#F0F4F3"
+        ]
+      },
+      "forest-mobile": {
+        "role": "primary",
+        "displayName": "Estate Forest (phone)",
+        "canonical": "#1A3721",
+        "tonalRamp": [
+          "#1E2F22",
+          "#32553A",
+          "#437E51",
+          "#51AA67",
+          "#7BBA8A",
+          "#A5CBAE",
+          "#CCDFD0",
+          "#F0F5F1"
+        ]
+      },
+      "pine": {
+        "role": "primary",
+        "displayName": "Pine Leaf",
+        "canonical": "#2F5D50",
+        "tonalRamp": [
+          "#1F2E2A",
+          "#33544B",
+          "#457C6C",
+          "#55A78F",
+          "#7EB8A7",
+          "#A6CAC0",
+          "#CCDED9",
+          "#F0F4F3"
+        ]
+      },
+      "clay": {
+        "role": "secondary",
+        "displayName": "Clay Label",
+        "canonical": "#99583C",
+        "tonalRamp": [
+          "#31221C",
+          "#593B2E",
+          "#85523C",
+          "#B46847",
+          "#C18B74",
+          "#CFAFA1",
+          "#E1D1CA",
+          "#F5F1EF"
+        ]
+      },
+      "rust": {
+        "role": "secondary",
+        "displayName": "Terracotta",
+        "canonical": "#B35F37",
+        "tonalRamp": [
+          "#33221A",
+          "#5E3A29",
+          "#8D5134",
+          "#C0663C",
+          "#CA8A6C",
+          "#D4AE9B",
+          "#E3D0C7",
+          "#F6F1EF"
+        ]
+      },
+      "gold": {
+        "role": "tertiary",
+        "displayName": "Brass",
+        "canonical": "#C9A24B",
+        "tonalRamp": [
+          "#332B1A",
+          "#5E4E29",
+          "#8E7233",
+          "#C1973B",
+          "#CAAD6B",
+          "#D5C39B",
+          "#E3DBC7",
+          "#F6F4EF"
+        ]
+      },
+      "butter": {
+        "role": "tertiary",
+        "displayName": "Butter",
+        "canonical": "#FBF1D8",
+        "tonalRamp": [
+          "#392E13",
+          "#6C551B",
+          "#A57E1C",
+          "#E3A918",
+          "#E3BA53",
+          "#E4CB8C",
+          "#EBDEC0",
+          "#F7F4ED"
+        ]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Garden Paper",
+        "canonical": "#F6F3EB",
+        "tonalRamp": [
+          "#2F2A1D",
+          "#564C30",
+          "#806F41",
+          "#AD934E",
+          "#BCAA79",
+          "#CCC1A4",
+          "#DFDACB",
+          "#F5F3F0"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Linen Card",
+        "canonical": "#FFFEFA",
+        "tonalRamp": [
+          "#3E340F",
+          "#756111",
+          "#B4930D",
+          "#FAC801",
+          "#F3D042",
+          "#EED882",
+          "#F0E5BB",
+          "#F9F6EC"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Moss Ink",
+        "canonical": "#263D32",
+        "tonalRamp": [
+          "#212C26",
+          "#384F44",
+          "#4D7461",
+          "#619B7F",
+          "#86AF9C",
+          "#ABC4B9",
+          "#CFDBD5",
+          "#F1F4F2"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Reed Line",
+        "canonical": "#DADDD1",
+        "tonalRamp": [
+          "#282A23",
+          "#474B3C",
+          "#676D54",
+          "#87906B",
+          "#A1A88E",
+          "#BCC0B0",
+          "#D7D9D1",
+          "#F3F3F1"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Lichen Gray",
+        "canonical": "#657068",
+        "tonalRamp": [
+          "#252726",
+          "#414642",
+          "#5C655F",
+          "#77847B",
+          "#969F99",
+          "#B5BBB7",
+          "#D4D6D4",
+          "#F2F3F2"
+        ]
+      },
+      "mint": {
+        "role": "neutral",
+        "displayName": "Dew Mint",
+        "canonical": "#E6ECDC",
+        "tonalRamp": [
+          "#282D1F",
+          "#475235",
+          "#677948",
+          "#87A359",
+          "#A1B581",
+          "#BCC8A8",
+          "#D7DDCD",
+          "#F3F4F0"
+        ]
+      },
+      "sage": {
+        "role": "neutral",
+        "displayName": "Fern Sage",
+        "canonical": "#E1E8DA",
+        "tonalRamp": [
+          "#262C21",
+          "#434F38",
+          "#61744D",
+          "#7E9B61",
+          "#9BAF86",
+          "#B8C5AB",
+          "#D5DBCF",
+          "#F2F4F1"
+        ]
+      },
+      "sand": {
+        "role": "neutral",
+        "displayName": "Sand Panel",
+        "canonical": "#F1E6D5",
+        "tonalRamp": [
+          "#32291A",
+          "#5C492A",
+          "#8A6937",
+          "#BC8B3F",
+          "#C7A46F",
+          "#D3BE9D",
+          "#E2D8C8",
+          "#F5F3EF"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Pale Cream",
+        "canonical": "#D3DCCD",
+        "tonalRamp": [
+          "#252A22",
+          "#424C3B",
+          "#5E6F52",
+          "#799468",
+          "#98AA8B",
+          "#B6C1AE",
+          "#D4DAD0",
+          "#F2F3F1"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Desktop hero headline only."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section titles and desktop flow step headings."
+      },
+      "heading-lg": {
+        "displayName": "Heading large",
+        "purpose": "Secondary section headings and the mobile flow headline."
+      },
+      "heading": {
+        "displayName": "Heading",
+        "purpose": "Card titles and menu panel titles."
+      },
+      "subheading": {
+        "displayName": "Subheading",
+        "purpose": "Landing dish names, app bar titles, calendar day numbers."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "The paragraph under a section title, capped at 34rem."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, inputs (16px so iOS never zooms)."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Helper text, totals, chips, tabs."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Tab bar labels, badges, notes."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Bold uppercase section labels above headings."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Semibold 16px sans on every button."
+      }
+    },
+    "shadows": [
+      {
+        "name": "ambient-card",
+        "value": "0 1px 2px rgba(32, 63, 50, 0.04)",
+        "purpose": "The standard card; the hairline border does the work."
+      },
+      {
+        "name": "frosted-chrome",
+        "value": "backdrop-filter: blur(12px); background at 85-95% opacity",
+        "purpose": "Sticky header, app bar, pinned action bar and tab bar. Opaque under reduced-transparency."
+      },
+      {
+        "name": "photo-scrim",
+        "value": "linear-gradient(to top, rgba(22, 56, 43, 0.92), rgba(22, 56, 43, 0.3) 55%, transparent 78%)",
+        "purpose": "Keeps the white headline legible on the phone hero photo."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Every entrance, slide and press."
+      },
+      {
+        "name": "press",
+        "value": "150ms",
+        "purpose": "Button, chip and slot feedback; scale 0.97 on press."
+      },
+      {
+        "name": "color",
+        "value": "200ms",
+        "purpose": "Border and background changes."
+      },
+      {
+        "name": "indicator",
+        "value": "320ms",
+        "purpose": "The pine pill sliding between menu tabs."
+      },
+      {
+        "name": "rise",
+        "value": "460-520ms",
+        "purpose": "Entrance: translateY(16px) and fade. Rows 520ms, landing cards 460ms."
+      },
+      {
+        "name": "stagger",
+        "value": "45-55ms per item, first 8 only",
+        "purpose": "Later items arrive together so long lists never make anyone wait."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "All entrances and transitions drop out; content appears at once."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px (phone to desktop: palette, header, tab bar, hero and booking flow all switch)"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Forest Button",
+      "kind": "button",
+      "refersTo": "button-forest",
+      "description": "The primary action everywhere on the customer site.",
+      "html": "<button class=\"ds-btn-forest\">Reserve a table <svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-forest { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px; border: 1px solid transparent; border-radius: 10px; font: 600 16px/1 system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; cursor: pointer; text-decoration: none; transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), border-color 150ms cubic-bezier(0.23, 1, 0.32, 1); background: rgb(var(--forest, 32 63 50)); color: rgb(var(--paper, 255 254 250)); } .ds-btn-forest:hover { background: #1A3721; } .ds-btn-forest:active { transform: scale(0.97); } .ds-btn-forest:focus-visible { outline: 2px solid #2F5D50; outline-offset: 2px; }"
+    },
+    {
+      "name": "Terracotta Button",
+      "kind": "button",
+      "refersTo": "button-rust",
+      "description": "The single warm call to action (phone hero). Once per screen at most.",
+      "html": "<button class=\"ds-btn-rust\">Reserve now <svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-rust { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px; border: 1px solid transparent; border-radius: 10px; font: 600 16px/1 system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; cursor: pointer; text-decoration: none; transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), border-color 150ms cubic-bezier(0.23, 1, 0.32, 1); justify-content: space-between; min-width: 260px; background: #B35F37; color: #fff; } .ds-btn-rust:hover { background: #9E5230; } .ds-btn-rust:active { transform: scale(0.97); } .ds-btn-rust:focus-visible { outline: 2px solid #2F5D50; outline-offset: 2px; }"
+    },
+    {
+      "name": "Paper Button",
+      "kind": "button",
+      "refersTo": "button-paper",
+      "description": "Secondary action; sits beside a forest button or on a green band.",
+      "html": "<button class=\"ds-btn-paper\">Explore our menu</button>",
+      "css": ".ds-btn-paper { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px; border: 1px solid transparent; border-radius: 10px; font: 600 16px/1 system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; cursor: pointer; text-decoration: none; transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), border-color 150ms cubic-bezier(0.23, 1, 0.32, 1); background: rgb(var(--paper, 255 254 250)); color: rgb(var(--forest, 32 63 50)); border-color: rgb(var(--line, 218 221 209)); } .ds-btn-paper:hover { background: #fff; } .ds-btn-paper:active { transform: scale(0.97); } .ds-btn-paper:focus-visible { outline: 2px solid #2F5D50; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field-input",
+      "description": "Labelled input: 48px, 10px corners, pine focus ring.",
+      "html": "<label class=\"ds-field\"><span>Email address</span><input type=\"email\" placeholder=\"you@example.com\"></label>",
+      "css": ".ds-field { display: grid; gap: 6px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; } .ds-field span { font-size: 14px; font-weight: 500; color: rgb(var(--ink, 38 61 50)); } .ds-field input { min-height: 48px; width: 260px; box-sizing: border-box; padding: 0 12px; background: #fff; color: rgb(var(--ink, 38 61 50)); border: 1px solid rgb(var(--line, 218 221 209)); border-radius: 10px; font: 16px system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; transition: border-color 150ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-field input:focus { outline: none; border-color: #2F5D50; box-shadow: 0 0 0 2px rgba(47, 93, 80, 0.25); }"
+    },
+    {
+      "name": "Badges",
+      "kind": "chip",
+      "refersTo": "badge-mint",
+      "description": "Mint for info and capacity, brass for Private, butter for scheduled pre-orders.",
+      "html": "<span class=\"ds-badge ds-badge-mint\">2–4 guests</span> <span class=\"ds-badge ds-badge-gold\">Private</span> <span class=\"ds-badge ds-badge-butter\">Scheduled · 6 PM</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 6px; font: 600 13px/1 system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; white-space: nowrap; } .ds-badge-mint { background: #E6ECDC; color: #2F5D50; } .ds-badge-gold { background: #C9A24B; color: #263D32; text-transform: uppercase; letter-spacing: 0.04em; } .ds-badge-butter { background: #FBF1D8; color: #805D0A; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat Linen Card with a hairline border and an almost invisible ambient shadow.",
+      "html": "<article class=\"ds-card\"><h3>Family</h3><p>5–8 guests · 3 tables</p></article>",
+      "css": ".ds-card { width: 260px; box-sizing: border-box; padding: 20px; background: rgb(var(--paper, 255 254 250)); border: 1px solid rgb(var(--line, 218 221 209)); border-radius: 16px; box-shadow: 0 1px 2px rgba(32, 63, 50, 0.04); } .ds-card h3 { margin: 0; font: 500 24px/1.2 Newsreader, Georgia, serif; letter-spacing: -0.01em; color: rgb(var(--forest, 32 63 50)); } .ds-card p { margin: 4px 0 0; font: 14px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #657068; }"
+    },
+    {
+      "name": "Seat Chips",
+      "kind": "chip",
+      "refersTo": "seat-chip",
+      "description": "Table choice: neutral, chosen (pine with a check), booked (struck through).",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\">F1</button><button class=\"ds-chip ds-chip-on\" aria-pressed=\"true\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12.5l4.5 4.5L19 7\"/></svg>F2</button><button class=\"ds-chip\" disabled><s>F3</s></button></div>",
+      "css": ".ds-chips { display: flex; gap: 8px; } .ds-chip { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 56px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: rgb(var(--canvas, 246 243 235)); color: rgb(var(--ink, 38 61 50)); font: 600 14px system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; cursor: pointer; transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-chip:active { transform: scale(0.96); } .ds-chip-on { background: #2F5D50; color: #fff; } .ds-chip:disabled { color: #657068; opacity: 0.5; cursor: not-allowed; } .ds-chip:focus-visible { outline: 2px solid #2F5D50; outline-offset: 2px; }"
+    },
+    {
+      "name": "Time Slots",
+      "kind": "chip",
+      "refersTo": "slot",
+      "description": "Two-hour blocks in a three-column grid; chosen is pine.",
+      "html": "<div class=\"ds-slots\"><button class=\"ds-slot\">12–2 PM</button><button class=\"ds-slot ds-slot-on\" aria-checked=\"true\">6–8 PM</button><button class=\"ds-slot\">8–10 PM</button></div>",
+      "css": ".ds-slots { display: grid; grid-template-columns: repeat(3, 96px); gap: 8px; } .ds-slot { min-height: 48px; border: 1px solid rgb(var(--line, 218 221 209)); border-radius: 10px; background: rgb(var(--paper, 255 254 250)); color: rgb(var(--ink, 38 61 50)); font: 500 14px system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; cursor: pointer; transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-slot:active { transform: scale(0.97); } .ds-slot-on { background: #2F5D50; border-color: #2F5D50; color: #fff; } .ds-slot:focus-visible { outline: 2px solid #2F5D50; outline-offset: 2px; }"
+    },
+    {
+      "name": "Menu Tabs",
+      "kind": "nav",
+      "refersTo": "menu-tab",
+      "description": "Category tabs; the pine pill slides behind the chosen one (320ms ease-out).",
+      "html": "<div class=\"ds-tabs\"><span class=\"ds-pill\"></span><button class=\"ds-tab ds-tab-on\">Mains</button><button class=\"ds-tab\">Starters &amp; soups</button><button class=\"ds-tab\">Desserts &amp; drinks</button></div>",
+      "css": ".ds-tabs { position: relative; display: flex; gap: 8px; } .ds-pill { position: absolute; left: 0; top: 0; width: 76px; height: 40px; border-radius: 10px; background: #2F5D50; transition: transform 320ms cubic-bezier(0.23, 1, 0.32, 1), width 320ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tab { position: relative; z-index: 1; min-height: 40px; padding: 0 16px; border: 1px solid transparent; border-radius: 10px; background: #EEF0E9; color: rgb(var(--ink, 38 61 50)); font: 600 14px system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; cursor: pointer; } .ds-tab-on { background: transparent; color: #fff; } .ds-tab:focus-visible { outline: 2px solid #2F5D50; outline-offset: 2px; }"
+    },
+    {
+      "name": "Menu Row",
+      "kind": "card",
+      "refersTo": "menu-row",
+      "description": "Dish row: photo fills the card height, name, two-line description, price and quantity stepper.",
+      "html": "<li class=\"ds-row\"><div class=\"ds-photo\"></div><div class=\"ds-body\"><h4>Chicken Inasal</h4><p>Char-grilled marinated chicken with calamansi and annatto</p><div class=\"ds-foot\"><b>₱420</b><div class=\"ds-qty\"><button aria-label=\"Remove one\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"M5 12h14\"/></svg></button><output>1</output><button aria-label=\"Add one\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg></button></div></div></div></li>",
+      "css": ".ds-row { list-style: none; display: flex; width: 420px; min-height: 104px; overflow: hidden; background: rgb(var(--paper, 255 254 250)); border: 1px solid rgb(var(--line, 218 221 209)); border-radius: 16px; } .ds-photo { width: 96px; flex: none; background: linear-gradient(135deg, #C9A24B, #99583C); } .ds-body { display: flex; flex-direction: column; flex: 1; padding: 12px; min-width: 0; } .ds-body h4 { margin: 0; font: 600 16px/1.3 system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: rgb(var(--ink, 38 61 50)); } .ds-body p { margin: 2px 0 0; font: 13px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #657068; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } .ds-foot { margin-top: auto; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; font: 600 14px system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; } .ds-qty { display: inline-flex; align-items: center; gap: 4px; } .ds-qty button { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #DCDDCF; border-radius: 8px; background: #F0F0EA; color: rgb(var(--ink, 38 61 50)); cursor: pointer; } .ds-qty button:active { background: rgb(var(--canvas, 246 243 235)); } .ds-qty output { display: grid; place-items: center; min-width: 36px; height: 36px; border-radius: 8px; background: #E1E8DA; font: 600 14px system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; } .ds-qty button:focus-visible { outline: 2px solid #2F5D50; outline-offset: 2px; }"
+    },
+    {
+      "name": "Mobile Tab Bar",
+      "kind": "nav",
+      "refersTo": "tabbar",
+      "description": "Four-item bottom bar on phones; active is forest and semibold.",
+      "html": "<nav class=\"ds-tabbar\"><a class=\"ds-on\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 10.5L12 4l8 6.5V20h-5.5v-5.5h-5V20H4z\"/></svg><span>Discover</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 3v8M4.5 3v5a2.5 2.5 0 005 0V3M7 11v10\"/><path d=\"M17 21V3c-2.2 1.2-3.5 3.6-3.5 7v3H17\"/></svg><span>Menu</span></a></nav>",
+      "css": ".ds-tabbar { display: grid; grid-template-columns: repeat(2, 1fr); width: 260px; border-top: 1px solid rgb(var(--line, 220 221 207)); background: rgba(255, 253, 248, 0.95); } .ds-tabbar a { display: grid; place-items: center; align-content: center; gap: 4px; min-height: 60px; font: 500 13px system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #657068; text-decoration: none; } .ds-tabbar a.ds-on { color: rgb(var(--forest, 26 55 33)); font-weight: 600; } .ds-tabbar a:active { background: rgb(var(--canvas, 247 241 229)); } .ds-tabbar a:focus-visible { outline: 2px solid #2F5D50; outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Garden Table",
+    "overview": "**Creative North Star: \"The Garden Table\"**\n\nBella Vista looks like a long lunch in the garden of a country estate: warm cream paper, deep green foliage, one terracotta note, and serif headlines that read like a printed menu. Nothing shouts. Surfaces are flat and quiet, photography does the persuading, and every movement is slow enough to feel unhurried and fast enough never to be waited on.\n\nThe system serves two moods from one codebase. On a desktop it is an editorial website: wide photographs, generous section gaps, a sticky summary beside the booking flow. On a phone it becomes an app: a centered logo, a pinned bottom tab bar, one full-bleed hero card, and a booking flow with its own app bar and a pinned action button. The two share every component and differ only in a palette shift and chrome, both switched at 1024px.\n\nThe type pairing does most of the branding. Newsreader gives headings their warmth; the platform's own sans does all the working text, so forms, prices, dish names and buttons stay fast and legible.",
+    "keyCharacteristics": [
+      "Warm paper backgrounds and deep estate green; terracotta only as a rare warm note.",
+      "Serif for voice, system sans for work.",
+      "Flat surfaces with hairline borders; depth from translucent sticky chrome, not shadows.",
+      "Soft, generous corners (10 to 20px) and large tap targets (40 to 52px).",
+      "Selected always means pine green fill with white text.",
+      "Motion is rise-and-fade, ease-out, staggered, capped, and off for reduced-motion users."
+    ],
+    "rules": [
+      {
+        "name": "The One Switch Rule",
+        "body": "Canvas, paper, ink, forest and line are CSS variables (`--canvas`, `--paper`, `--ink`, `--forest`, `--line`). Below 1024px they take the phone values; inside `body.admin` and `body.admin-auth` they take the staff values. Use the token names (`bg-canvas`, `text-ink`, `bg-forest`, `border-line`); never hard-code their hex.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pine Selected Rule",
+        "body": "Anything the guest has chosen is pine green with white text. Dates, time slots, seat chips, menu tabs and the quantity-chosen row border all use it, so selection reads the same everywhere.",
+        "section": "colors"
+      },
+      {
+        "name": "The Terracotta Rule",
+        "body": "Terracotta appears once per screen at most, on the single warm call to action. Everywhere else the primary action is forest. (The \"Your booking\" page still uses terracotta for several buttons; that is legacy, see Known drift.)",
+        "section": "colors"
+      },
+      {
+        "name": "The Readable Muted Rule",
+        "body": "Secondary text is Lichen Gray (4.65:1). On the mint band it steps to #5D625B so it stays above 4.5:1. If a Figma value fails 4.5:1 for small text, darken it and record the change here.",
+        "section": "colors"
+      },
+      {
+        "name": "The Serif Voice Rule",
+        "body": "Newsreader is for headings, the band taglines, calendar day numbers and the confirmation date. Dish names in lists, prices, buttons and form text are always the system sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Label Rule",
+        "body": "Section labels use `.label` (bold, uppercase, 0.12em). The older `.eyebrow` (semibold, 0.04em, not uppercase) is legacy; do not use it on new screens.",
+        "section": "typography"
+      },
+      {
+        "name": "The Measure Rule",
+        "body": "Paragraphs sit in `max-w-measure` (34rem). Headings use balanced wrapping and paragraphs use pretty wrapping.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces have no shadow at rest beyond the ambient card line. Do not add drop shadows to buttons, chips or rows. State is shown by colour (pine fill, border tint), not elevation.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** use the token names (`canvas`, `paper`, `ink`, `forest`, `line`, `pine`, `clay`, `mint`, `sand`) and never a raw hex; the palette changes by context through the five variables.",
+      "**Do** mark every chosen thing with the Pine Selected Rule: pine fill, white text.",
+      "**Do** keep the primary action forest, and use terracotta once per screen at most.",
+      "**Do** write section labels with `.label` and headings in Newsreader at the type scale; keep dish names, prices and form text in the system sans.",
+      "**Do** keep tap targets at 40px or more (48px for primary actions) and inputs at 16px or more.",
+      "**Do** put fixed heights on the images themselves, not on the grid that holds them. A fixed-height grid with `overflow: visible` let photos spill over the next section.",
+      "**Do** dim disabled text by colour, not opacity, so it stays readable; reserve opacity dimming for non-text (unavailable calendar days).",
+      "**Do** animate only `transform` and `opacity`, with the shared ease-out, and stagger no more than eight items.",
+      "**Do** darken any Figma colour that fails 4.5:1 for small text, and record the change under Colors.",
+      "**Do** check a layout change by looking at it at phone, tablet and desktop widths; an accessibility scan does not catch overlap."
+    ],
+    "donts": [
+      "**Don't** add drop shadows to buttons, chips or rows; state is colour.",
+      "**Don't** use `.eyebrow` or the old `.inner-hero` / `.content-panel` styles on new screens.",
+      "**Don't** use terracotta for ordinary buttons or for links. Action links (\"See the full menu\", \"Add more\") are pine; inline links in running text are clay.",
+      "**Don't** use bold uppercase labels for anything but section labels.",
+      "**Don't** hotlink photos or load anything from another site's image host; use local files and the `venue_image()` helper.",
+      "**Don't** animate width, height, margin or top/left (the one exception is the tab indicator's width, which is a single element).",
+      "**Don't** apply hover styles that need a mouse without the hover media guard; the Tailwind setting already does this for `hover:` utilities.",
+      "**Don't** let an animation hide content from users with reduced-motion turned on."
+    ]
+  }
+}
