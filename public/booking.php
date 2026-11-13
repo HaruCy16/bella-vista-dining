@@ -49,5 +49,5 @@ require __DIR__ . '/../includes/header.php';
     </section>
 </main>
 <script>window.BV_DEPOSIT_PERCENT = <?= PaymentService::DEPOSIT_PERCENT ?>; window.BV_BOOKING = <?= json_encode($booking, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script>
-<script src="/public/assets/js/booking.js?v=20261113b" defer></script>
+<script src="/public/assets/js/booking.js?v=20261114" defer></script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>

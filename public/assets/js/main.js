@@ -28,16 +28,48 @@
         $$('.reveal').forEach((element) => observer.observe(element));
     }
 
-    /* ---------- Menu rows: replay the entrance whenever a category is shown ---------- */
+    /* ---------- Menu rows: rise in as they scroll into view, in staggered batches ---------- */
+    const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rowObserver = 'IntersectionObserver' in window && !reducedMotion()
+        ? new IntersectionObserver((entries) => {
+            // Rows that arrive together form one batch; each waits a little longer than the last.
+            entries.filter((entry) => entry.isIntersecting).forEach((entry, index) => {
+                entry.target.style.setProperty('--i', Math.min(index, MAX_STAGGER));
+                entry.target.classList.add('in');
+                rowObserver.unobserve(entry.target);
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -4% 0px' })
+        : null;
+    if (rowObserver) $$('.menu-browser').forEach((browser) => browser.classList.add('is-animated'));
+
+    /* Hide a panel's rows again and let them rise in as they come into view. */
     function enterPanel(panel) {
-        if (!panel || panel.hidden) return;
-        indexChildren($$('.menu-row', panel));
-        panel.classList.remove('is-entering');
-        void panel.offsetWidth; // restart the CSS animation
-        panel.classList.add('is-entering');
+        if (!rowObserver || !panel || panel.hidden) return;
+        $$('.menu-row', panel).forEach((row) => {
+            row.classList.remove('in');
+            rowObserver.unobserve(row);
+            rowObserver.observe(row);
+        });
     }
     const enterVisiblePanels = () => $$('.menu-panel:not([hidden])').forEach(enterPanel);
-    document.addEventListener('bv:menu-shown', enterVisiblePanels); // sent by reserve.js on the menu step
+    document.addEventListener('bv:menu-shown', () => { enterVisiblePanels(); placeIndicators(false); }); // sent by reserve.js on the menu step
+
+    /* ---------- Sliding highlight behind the selected menu tab ---------- */
+    function placeIndicator(list, animate = true) {
+        const indicator = list.querySelector('.menu-tab-indicator');
+        const tab = list.querySelector('[role="tab"][aria-selected="true"]');
+        if (!indicator || !tab || !tab.offsetWidth) return;
+        if (!animate) list.classList.remove('is-ready');
+        indicator.style.width = `${tab.offsetWidth}px`;
+        indicator.style.height = `${tab.offsetHeight}px`;
+        indicator.style.transform = `translate(${tab.offsetLeft}px, ${tab.offsetTop}px)`;
+        list.classList.add('has-indicator');
+        if (!animate) requestAnimationFrame(() => requestAnimationFrame(() => list.classList.add('is-ready')));
+    }
+    const placeIndicators = (animate) => $$('.menu-tabs').forEach((list) => placeIndicator(list, animate));
+    placeIndicators(false);
+    document.fonts?.ready.then(() => placeIndicators(false)); // tab widths change once the web font loads
+    window.addEventListener('resize', () => placeIndicators(false));
 
     /* ---------- Tabs (WAI-ARIA tabs pattern: arrows, Home/End move between tabs) ---------- */
     $$('[data-tabs]').forEach((group) => {
@@ -51,13 +83,14 @@
             });
             if (focus) tab.focus();
             const list = tab.parentElement;
-            const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const smooth = !reducedMotion();
             list.scrollTo({ left: list.scrollLeft + tab.getBoundingClientRect().left - list.getBoundingClientRect().left - 16, behavior: smooth ? 'smooth' : 'auto' });
             // Scrolled deep into a long category? Start the new one from its top, under the sticky tabs.
             const stuckAt = parseFloat(getComputedStyle(list).top) || 0;
             if (group.getBoundingClientRect().top < stuckAt) {
                 window.scrollBy({ top: group.getBoundingClientRect().top - stuckAt });
             }
+            placeIndicator(list);
             enterPanel(document.getElementById(tab.getAttribute('aria-controls')));
         };
         tabs.forEach((tab, index) => {

@@ -15,7 +15,7 @@ $isManager = Auth::isManager($admin);
     <meta name="csrf-token" content="<?= e(Csrf::token()) ?>">
     <title>Operations · Bella Vista Dining</title>
     <?= brand_head_tags() ?>
-    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261113b">
+    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261114">
 </head>
 <body class="admin">
 <header class="admin-bar">
@@ -65,6 +65,6 @@ $isManager = Auth::isManager($admin);
         </section>
     <?php endif; ?>
 </main>
-<script src="/public/assets/js/admin.js?v=20261113b" defer></script>
+<script src="/public/assets/js/admin.js?v=20261114" defer></script>
 </body>
 </html>

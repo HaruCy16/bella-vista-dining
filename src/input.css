@@ -333,11 +333,23 @@
   .menu-tabs::-webkit-scrollbar, .dish-grid::-webkit-scrollbar, .gallery::-webkit-scrollbar { display: none; }
   .menu-tab { @apply min-h-[40px] shrink-0 cursor-pointer rounded-ctl border border-[rgba(35,37,28,0.08)] bg-paper px-4 font-sans text-small font-semibold text-ink transition-colors duration-150; }
   .menu-tab[aria-selected="true"] { @apply border-pine bg-pine text-white; }
+  /* Sliding highlight: once main.js has placed it, the selected tab goes transparent and the
+     pill glides behind it (transform + width, ease-out). */
+  .menu-tab-indicator { @apply pointer-events-none absolute left-0 top-0 hidden rounded-ctl bg-pine; }
+  .menu-tabs.has-indicator .menu-tab-indicator { @apply block; }
+  .menu-tabs.has-indicator .menu-tab { @apply relative z-[1] transition-[color,border-color] duration-200; }
+  .menu-tabs.has-indicator .menu-tab[aria-selected="true"] { @apply border-transparent bg-transparent text-white; }
+  .menu-tabs.is-ready .menu-tab-indicator { transition: transform 320ms cubic-bezier(0.23, 1, 0.32, 1), width 320ms cubic-bezier(0.23, 1, 0.32, 1); }
   .menu-panel-title { @apply m-0 mb-3 mt-4 text-heading; }
   .menu-rows { @apply m-0 grid list-none gap-2.5 p-0; }
   .menu-row { @apply flex min-h-[104px] overflow-hidden rounded-card border border-[rgba(35,37,28,0.07)] bg-paper transition-[border-color] duration-150; }
   .menu-row.is-selected { @apply border-pine/40; }
-  .menu-row img { @apply w-24 shrink-0 self-stretch bg-sage object-cover sm:w-28; height: auto; }
+  /* The photo fills the card's height, whatever the text length. */
+  .menu-row-photo { @apply relative w-24 shrink-0 overflow-hidden bg-sage sm:w-28; }
+  .menu-row-photo img { @apply absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out; }
+  @media (hover: hover) and (pointer: fine) {
+    .menu-row:hover .menu-row-photo img { transform: scale(1.06); }
+  }
   .menu-row-body { @apply flex min-w-0 flex-1 flex-col p-3 sm:p-4; }
   .menu-row h3 { @apply m-0 font-sans text-body font-semibold leading-snug; }
   .menu-row p { @apply m-0 mt-0.5 line-clamp-2 text-caption text-muted; }
@@ -531,25 +543,24 @@
 
   /* Staggered entrances. --i is set by main.js (capped, so long lists never wait).
      Transform + opacity only; ease-out so items arrive quickly and settle. */
-  .js .menu-panel.is-entering .menu-row,
   .js .stagger.visible > * { animation: rise 460ms cubic-bezier(0.23, 1, 0.32, 1) both; animation-delay: calc(var(--i, 0) * 45ms); }
   .js .stagger:not(.visible) > * { opacity: 0; }
-  .js .menu-tab[aria-selected="true"] { animation: tab-pop 220ms cubic-bezier(0.23, 1, 0.32, 1); }
+
+  /* Menu rows rise in as they scroll into view, in small staggered batches (main.js adds
+     .is-animated to the browser and .in to each row). Without JS nothing is hidden. */
+  .menu-browser.is-animated .menu-row:not(.in) { opacity: 0; transform: translateY(16px); }
+  .menu-browser.is-animated .menu-row.in { animation: rise 520ms cubic-bezier(0.23, 1, 0.32, 1) both; animation-delay: calc(var(--i, 0) * 55ms); }
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  from { opacity: 0; transform: translateY(16px) scale(0.985); }
   to { opacity: 1; transform: none; }
-}
-@keyframes tab-pop {
-  from { transform: scale(0.94); }
-  to { transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
   .js .reveal { @apply translate-y-0 opacity-100; }
-  .js .stagger > *, .js .menu-panel .menu-row, .js .menu-tab { animation: none !important; opacity: 1 !important; }
+  .js .stagger > *, .menu-browser .menu-row { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
 
 @media (prefers-reduced-transparency: reduce) {
