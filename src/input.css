@@ -182,8 +182,8 @@
   .share-card small { @apply block text-small text-muted; }
   .share-card .icon { @apply text-pine; }
 
-  .gallery { @apply -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:overflow-visible sm:h-[18rem] sm:grid-cols-[1.45fr_1fr_1fr] sm:px-0 lg:h-[20rem] lg:gap-4; scrollbar-width: none; }
-  .gallery img { @apply aspect-[4/3] w-[78%] shrink-0 snap-start rounded-card object-cover sm:aspect-auto sm:h-full sm:w-full; }
+  .gallery { @apply -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-[1.45fr_1fr_1fr] sm:overflow-visible sm:px-0 lg:gap-4; scrollbar-width: none; }
+  .gallery img { @apply aspect-[4/3] w-[78%] shrink-0 snap-start rounded-card object-cover sm:aspect-auto sm:h-[18rem] sm:w-full lg:h-[20rem]; } /* fixed height on the photos, not the grid, so they can never spill out */
 
   /* Tables */
   .paper-band { @apply border-y border-line bg-paper py-16 lg:py-20; }
