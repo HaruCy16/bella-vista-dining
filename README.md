@@ -153,7 +153,7 @@ Example: VIP for 18 guests = ₱2,500 + 3 × ₱300 = **₱3,400**.
 | Payment provider | Mock gateway now (`/public/pay/mock.php`, disabled when `APP_ENV=production`); PayMongo test mode next (GCash, Maya, cards). Stripe dropped: no GCash/PayPal, PH merchant accounts unclear |
 | `orders.total_amount` | Computed in the service layer, same transaction as items |
 | Timezone | `Asia/Manila` everywhere: PHP (`date.timezone`, `date_default_timezone_set`), containers (`TZ`), MySQL session (`SET time_zone = '+08:00'` on connect; Manila has no DST) |
-| Web root | The project root is served (shared hosting cannot change it). `.htaccess` returns 403 for dotfiles, `database/`, `includes/`, `src/`, `templates/`, `tests/`, `scripts/`, `docker/`, `sketch/`, `vendor/`, `node_modules/` and tooling files |
+| Web root | The project root is served (shared hosting cannot change it). `.htaccess` returns 403 for dotfiles, `database/`, `includes/`, `src/`, `tests/`, `scripts/`, `docker/`, `sketch/`, `vendor/`, `node_modules/` and tooling files |
 | Location & map | **Sample data** (spec gives no address): Santo Tomas, Batangas, set in `Config::ADDRESS_LINES` / `LATITUDE` / `LONGITUDE`. Google Maps Embed API when `GOOGLE_MAPS_EMBED_API_KEY` is set, keyless Google embed otherwise; "Get directions" uses Google Maps URLs (no key) |
 | Compiled CSS | `public/assets/css/app.css` is committed so hosts without Node work |
 | Booking flow | Full page, not a modal: `/public/reserve.php` (visit → seating → menu → pre-order → checkout), then `/public/confirmation.php`. Each step has its own `#hash` so Back works. Landing CTAs link to it, with `?date=&time=&guests=` prefilled by the landing picker. Follows the Figma mobile + desktop frames |
@@ -201,7 +201,7 @@ includes/                 bootstrap.php, db.php (PDO), session.php
 src/Support/              Config, Money, Csrf, Auth
 src/Repositories/         PDO queries
 src/Services/             business rules
-templates/                header / footer
+includes/header.php, footer.php, partials/   shared layout (with bootstrap, db, session, view helpers)
 database/                 schema.sql, seed.sql, migrations/
 scripts/                  CLI tools (seed-admin.php)
 tests/                    PHPUnit

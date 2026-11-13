@@ -21,7 +21,7 @@ if ($reference !== '' && ($email = GuestSession::emailFor($reference)) !== null)
 
 $pageTitle = 'Your booking · Bella Vista Dining';
 $activePage = 'booking';
-require __DIR__ . '/../templates/header.php';
+require __DIR__ . '/../includes/header.php';
 
 ?>
 <main id="main" class="wrap booking-page">
@@ -50,4 +50,4 @@ require __DIR__ . '/../templates/header.php';
 </main>
 <script>window.BV_DEPOSIT_PERCENT = <?= PaymentService::DEPOSIT_PERCENT ?>; window.BV_BOOKING = <?= json_encode($booking, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script>
 <script src="/public/assets/js/booking.js?v=20261113b" defer></script>
-<?php require __DIR__ . '/../templates/footer.php'; ?>
+<?php require __DIR__ . '/../includes/footer.php'; ?>

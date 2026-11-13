@@ -81,7 +81,7 @@
   .main-menu { @apply hidden items-center gap-6 lg:flex; }
   .main-menu a { @apply text-body font-medium text-ink/75 no-underline transition-colors hover:text-ink; }
   .main-menu a[aria-current="page"] { @apply text-ink underline decoration-clay decoration-2 underline-offset-[6px]; }
-  .nav-cta { @apply hidden lg:inline-flex; }
+  .main-menu-cta { @apply font-semibold text-forest; }
   .open-status { @apply hidden items-center gap-2 text-caption font-medium text-muted xl:inline-flex; }
   .open-status::before { @apply h-2 w-2 rounded-full bg-muted/60; content: ''; }
   .open-status.is-open { @apply text-olive; }
@@ -128,25 +128,24 @@
   .hero-m-hours { @apply mt-3 flex items-center gap-2 text-small text-muted; }
 
   /* ---------- Landing: desktop hero ---------- */
-  .hero-d { @apply hidden items-center gap-14 py-14 lg:grid lg:grid-cols-[1fr_1.1fr]; }
+  .hero-d { @apply hidden items-center gap-14 pb-14 pt-12 lg:grid lg:grid-cols-[1fr_1.05fr]; }
   .hero-d h1 { @apply m-0 mt-4; }
   .hero-actions { @apply mt-8 flex flex-wrap gap-3; }
-  .hero-note { @apply m-0 mt-5 text-small text-muted; }
-  .hero-media { @apply m-0 overflow-hidden rounded-panel bg-sage; aspect-ratio: 4 / 3; }
+  .hero-note { @apply mt-6; }
+  .hero-media { @apply m-0 overflow-hidden rounded-panel bg-sage; aspect-ratio: 6 / 5; }
   .hero-media img { @apply h-full w-full object-cover; }
 
   .band { @apply hidden bg-forest text-cream lg:block; }
-  .band-list { @apply m-0 flex justify-between gap-6 py-5 text-body; list-style: none; }
+  .band-list { @apply my-0 flex justify-between gap-6 py-6 font-serif text-lead; list-style: none; }
 
   /* About, history */
-  .about { @apply grid items-center gap-8 lg:grid-cols-2 lg:gap-16; }
-  .about.section-top { @apply pt-0 lg:pt-20; } /* on phones it follows the hero card directly */
+  .about { @apply grid items-center gap-8 pb-16 lg:grid-cols-2 lg:gap-16 lg:py-24; }
   .about-media { @apply hidden lg:block; }
   .about-media img { @apply aspect-[4/3] w-full rounded-card object-cover; }
   .about .title { @apply m-0 mt-2; }
   .about-copy { @apply mt-4 max-w-measure text-muted; }
-  .about .text-link { @apply mt-2; }
-  .history { @apply grid gap-8 border-t border-line pt-10 lg:grid-cols-3 lg:gap-12; }
+  .about-copy-strong { @apply font-medium text-ink; }
+  .history { @apply grid gap-8 border-t border-line pb-16 pt-10 lg:grid-cols-3 lg:gap-12 lg:pb-20; }
   .history h2 { @apply m-0 mt-2 max-w-[14ch]; }
   .history-year { @apply m-0 font-serif text-heading text-clay; }
   .history h3 { @apply mb-1 mt-2 font-sans text-body font-semibold; }
@@ -154,6 +153,7 @@
 
   /* Menu highlights: swipe row on phones, three columns from tablet up */
   .tint { @apply bg-mint; }
+  .kitchen { @apply py-16 lg:py-20; }
   .dish-grid { @apply -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:px-0; scrollbar-width: none; }
   .dish-card { @apply m-0 w-[78%] shrink-0 snap-start sm:w-auto; }
   .dish-card img { @apply aspect-[4/3] w-full rounded-card object-cover; }
@@ -162,8 +162,11 @@
   .dish-card-head span { @apply whitespace-nowrap font-semibold; }
   .dish-card p { @apply m-0 mt-1 text-small text-muted; }
 
-  .preorder { @apply grid items-center gap-6 lg:grid-cols-[1.3fr_1fr] lg:gap-16; }
+  .preorder { @apply pb-10 pt-16 lg:pt-20; }
   .preorder h2 { @apply m-0 mt-2; }
+  .preorder .hint { @apply m-0 mt-2 max-w-[44rem]; }
+  .gallery-section { @apply pb-16 lg:pb-20; }
+  .gallery-section .section-head .title { @apply m-0; }
   .share-card { @apply flex items-center gap-4 rounded-card border border-line bg-paper p-3 pr-5 text-ink no-underline transition-[transform,border-color] duration-150 ease-out hover:border-pine/40 active:scale-[0.98]; }
   .share-card img { @apply h-20 w-20 rounded-ctl object-cover; }
   .share-card span { @apply flex-1; }
@@ -171,11 +174,11 @@
   .share-card small { @apply block text-small text-muted; }
   .share-card .icon { @apply text-pine; }
 
-  .gallery { @apply -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:px-0; scrollbar-width: none; }
-  .gallery img { @apply aspect-[4/3] w-[78%] shrink-0 snap-start rounded-card object-cover sm:w-full; }
+  .gallery { @apply -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:h-[18rem] sm:grid-cols-[1.45fr_1fr_1fr] sm:px-0 lg:h-[20rem] lg:gap-4; scrollbar-width: none; }
+  .gallery img { @apply aspect-[4/3] w-[78%] shrink-0 snap-start rounded-card object-cover sm:aspect-auto sm:h-full sm:w-full; }
 
   /* Tables */
-  .paper-band { @apply border-y border-line bg-paper; }
+  .paper-band { @apply border-y border-line bg-paper py-16 lg:py-20; }
   .paper-band .section-head .title { @apply mt-2; }
   .table-types { @apply grid gap-4 md:grid-cols-3; }
   .table-type { @apply grid content-start rounded-card border border-line bg-canvas/50 p-6; }
@@ -186,14 +189,19 @@
   .table-type dt { @apply text-muted; }
   .table-type dd { @apply m-0 text-right font-medium; }
   .table-type .text-link { @apply mt-5; }
+  .table-type-fee { @apply m-0 mt-5 border-t border-line pt-4 text-small font-semibold; }
+  .table-type-note { @apply m-0 mt-1 text-small text-muted; }
 
   /* "There's a table for every gathering" quick picker (plain GET form to the booking flow) */
-  .gathering { @apply grid items-start gap-8 lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-10; }
-  .gathering h2 { @apply m-0 mt-2; }
+  .gathering { @apply grid items-start gap-8 lg:grid-cols-[1.1fr_1.1fr_1fr] lg:gap-10; }
+  .gathering h2 { @apply m-0 mt-2 text-heading-lg; }
   .gathering-hours { @apply m-0 mt-4 font-semibold; }
   .gathering .hint { @apply mt-1; }
+  .gathering-section { @apply py-16 lg:py-20; }
   .gathering fieldset { @apply m-0 min-w-0 border-0 p-0; }
-  .gathering legend { @apply mb-3 p-0; }
+  .gathering legend { @apply mb-3 p-0 text-small font-semibold; }
+  .gathering .cal-week { @apply mt-3; }
+  .cal-day.is-off { @apply cursor-not-allowed opacity-40; }
   .gathering-days.card { @apply sm:p-4; }
   .gathering-days .button { @apply mt-4; }
 
@@ -232,7 +240,11 @@
   .cta-band p { @apply m-0 mt-2 text-cream/85; }
 
   /* ---------- Footer ---------- */
-  .footer { @apply mt-0 border-t border-line py-12 text-body text-muted; }
+  .footer { @apply mt-0 border-t border-line py-8 text-small text-muted; }
+  .footer-row { @apply flex flex-col items-center justify-between gap-4 text-center lg:flex-row lg:text-left; }
+  .footer-middle nav { @apply mt-1 flex justify-center gap-4; }
+  .footer-middle nav a { @apply inline py-0; }
+  .footer-middle p, .footer-row > p { @apply m-0; }
   .cta-band + .footer, main:has(> .cta-band:last-child) + .footer { @apply border-t-0; }
   .footer-grid { @apply grid gap-8 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]; }
   .footer h2 { @apply m-0 mb-3 font-sans text-small font-semibold text-ink; }

@@ -38,7 +38,7 @@ $paymentLabel = [
 
 $pageTitle = 'Booking confirmed · Bella Vista Dining';
 $activePage = 'booking';
-require __DIR__ . '/../templates/header.php';
+require __DIR__ . '/../includes/header.php';
 ?>
 <main id="main" class="wrap confirm">
     <div class="confirm-head">
@@ -111,4 +111,4 @@ require __DIR__ . '/../templates/header.php';
         </section>
     </div>
 </main>
-<?php require __DIR__ . '/../templates/footer.php'; ?>
+<?php require __DIR__ . '/../includes/footer.php'; ?>

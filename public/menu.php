@@ -3,7 +3,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 $menuCategories = (new MenuRepository(db()))->categoriesWithItems();
 $pageTitle = 'Menu · Bella Vista Dining';
 $activePage = 'menu';
-require __DIR__ . '/../templates/header.php';
+require __DIR__ . '/../includes/header.php';
 ?>
 <main id="main" class="wrap menu-page">
     <div class="menu-page-head">
@@ -14,7 +14,7 @@ require __DIR__ . '/../templates/header.php';
         </div>
         <a class="button button-forest" href="/public/reserve.php">Reserve &amp; pre-order</a>
     </div>
-    <?php $menuOrderable = false; require __DIR__ . '/../templates/partials/menu-list.php'; ?>
+    <?php $menuOrderable = false; require __DIR__ . '/../includes/partials/menu-list.php'; ?>
     <p class="hint menu-sample-note">Sample menu and prices.</p>
 </main>
-<?php require __DIR__ . '/../templates/footer.php'; ?>
+<?php require __DIR__ . '/../includes/footer.php'; ?>

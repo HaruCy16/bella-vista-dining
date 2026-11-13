@@ -3,7 +3,7 @@
 // here; src/input.css uses only these names (no one-off pixel values).
 // Text/background pairs were contrast-checked against WCAG AA (4.5:1 for body text).
 module.exports = {
-  content: ['./index.php', './public/**/*.php', './templates/**/*.php', './includes/**/*.php', './admin/**/*.php', './public/assets/js/**/*.js'],
+  content: ['./index.php', './public/**/*.php', './includes/**/*.php', './admin/**/*.php', './public/assets/js/**/*.js'],
   future: {
     hoverOnlyWhenSupported: true, // hover styles only on devices that can hover (no sticky hover on tap)
   },
