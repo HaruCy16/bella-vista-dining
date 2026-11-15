@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "sfmono-regular",
+        "createdAt": "2026-11-13T21:11:41.853Z",
+        "reason": "Claude: Tailwind's default font-mono stack, used only for booking reference codes (.reference, .reference-code); DESIGN.md Typography documents the platform monospace for references. Not a user decision."
+      }
+    ]
+  }
+}

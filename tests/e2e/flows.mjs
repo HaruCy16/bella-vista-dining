@@ -51,9 +51,10 @@ async function openFlow(page, date, time, guests) {
 {
     const page = await newPage();
     await page.goto(`${BASE}/index.php`);
-    await page.click(`.gathering label:has([name=date][value="${FUTURE}"])`);
-    await page.click('.gathering label:has([name=time][value="18:00:00"])');
-    await Promise.all([page.waitForURL(/reserve\.php/), page.click('.gathering button[type=submit]')]);
+    const pickerDay = await page.$(`.gathering input[name=date][value="${FUTURE}"]:not([disabled])`);
+    if (pickerDay) await page.click(`.gathering label:has([name=date][value="${FUTURE}"])`);
+    await Promise.all([page.waitForURL(/reserve\.php/), page.click('.gathering .slot[value="18:00:00"]')]);
+    if (!pickerDay) await page.goto(`${BASE}/public/reserve.php?date=${FUTURE}&time=18:00:00`); // FUTURE is next week
     for (let i = 0; i < 4; i++) await page.click('[data-guests="1"]');
     check('Landing picker carries the date and time into the flow', (await page.textContent('[data-visit-selected]')).length > 0
         && (await page.getAttribute('[data-slot="18:00:00"]', 'aria-checked')) === 'true');

@@ -3,33 +3,44 @@
 // here; src/input.css uses only these names (no one-off pixel values).
 // Text/background pairs were contrast-checked against WCAG AA (4.5:1 for body text).
 module.exports = {
-  content: ['./index.php', './public/**/*.php', './templates/**/*.php', './includes/**/*.php', './admin/**/*.php', './public/assets/js/**/*.js'],
+  content: ['./index.php', './public/**/*.php', './includes/**/*.php', './admin/**/*.php', './public/assets/js/**/*.js'],
   future: {
     hoverOnlyWhenSupported: true, // hover styles only on devices that can hover (no sticky hover on tap)
   },
   theme: {
     extend: {
+      // Palette from the Figma designs (website, customer mobile, staff). The five core
+      // colours are CSS variables (src/input.css) so phones and the admin get their own
+      // shades of them. Values changed for contrast are noted; everything else is as designed.
       colors: {
-        canvas: '#F6F2E9',   // page background
-        paper: '#FCFAF5',    // raised surfaces (cards, modal, booking bar)
-        ink: '#23251C',      // primary text (13.9:1 on canvas)
-        muted: '#5E6052',    // secondary text (5.75:1 on canvas)
-        clay: '#9A3F2A',     // accent text and links on light (6.0:1 on canvas)
-        rust: '#B5523C',     // primary buttons, white label (4.96:1)
-        olive: '#4A5E28',    // positive state, open status (6.4:1 on canvas)
-        grove: '#2F3A1E',    // dark band background
-        cream: '#E9D7B9',    // text on grove (8.5:1)
-        sage: '#DDE2D0',
-        line: 'rgba(35, 37, 28, 0.14)',
-        danger: '#B42318',
-        'danger-ink': '#8C1D13',
-        'warn-ink': '#7A4B0C',
-        'ok-ink': '#2F3D17',
+        canvas: 'rgb(var(--canvas) / <alpha-value>)', // page background: web #F6F3EB, mobile/staff #F7F1E5
+        paper: 'rgb(var(--paper) / <alpha-value>)',   // cards, forms: web #FFFEFA, mobile/staff #FFFDF8
+        ink: 'rgb(var(--ink) / <alpha-value>)',       // body text: web #263D32, mobile #29352F, staff #2B2B2B
+        forest: 'rgb(var(--forest) / <alpha-value>)', // headings, primary buttons, dark bands: web #203F32, mobile/staff #1A3721
+        line: 'rgb(var(--line) / <alpha-value>)',     // dividers, card outlines: web #DADDD1, mobile #DCDDCF, staff #DDDCCF
+        muted: '#657068',    // secondary text (design #73796E is 4.0:1; this is the mobile shade, 4.65:1)
+        pine: '#2F5D50',     // icons, selected states, quantity controls (6.8:1)
+        clay: '#99583C',     // small uppercase labels, history dates (design #A96143 darkened to pass 4.5:1)
+        rust: '#B35F37',     // mobile hero button (design #C4693D darkened so white text passes)
+        mint: '#E6ECDC',     // menu band, active badges, context pills
+        mist: '#EEF0E9',     // inactive category tabs, quantity editing
+        sage: '#E1E8DA',     // quantity value, image placeholders
+        'qty-btn': '#F0F0EA',
+        'pay-on': '#EDF2EA', // selected payment option
+        sand: '#F1E6D5',     // policy and arrival-reminder panels
+        cream: '#D3DCCD',    // text on dark bands (8.2:1 on forest)
+        gold: '#C9A24B',     // "Private" seating badge
+        butter: '#FBF1D8',   // pre-order status badge
+        grove: '#1A3721',    // dark brand panels
+        olive: '#286343',    // positive text
+        danger: '#B3261E',
+        'danger-ink': '#A13831', 'danger-bg': '#FBEDEA', 'danger-dot': '#C2453D',
+        'ok-ink': '#286343', 'ok-bg': '#EDF1E8', 'ok-dot': '#4C9A6A',
+        'warn-ink': '#805D0A', 'warn-bg': '#F8EFD7', 'warn-dot': '#E0A100',
+        'seated-ink': '#356483', 'seated-bg': '#EAF1F7', 'seated-dot': '#5B8DB8',
+        'idle-ink': '#5D625B', 'idle-bg': '#EEEFEA', 'idle-dot': '#8A8A8A',
+        overlay: '#16382B',  // hero photo gradient
         deep: '#7A3E2A',     // legacy name still used by inner pages
-        forest: '#1F3A2C',   // primary actions, dark bands (white text 12.9:1)
-        pine: '#3A5D4B',     // selected states, section labels (6.9:1 on canvas)
-        mint: '#E3EADC',     // context pills, light green bands
-        gold: '#E2C98F',     // "Private" badge (ink text)
       },
       fontFamily: {
         serif: ['Newsreader', 'Georgia', 'serif'],

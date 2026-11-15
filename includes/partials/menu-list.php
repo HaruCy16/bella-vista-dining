@@ -16,6 +16,7 @@ $shortNames = ['Main Courses' => 'Mains', 'Appetizers & Soups' => 'Starters & so
                     aria-controls="menu-panel-<?= e($category['category_id']) ?>" aria-selected="<?= $index === 0 ? 'true' : 'false' ?>"
                     tabindex="<?= $index === 0 ? '0' : '-1' ?>"><?= e($shortNames[$category['category_name']] ?? $category['category_name']) ?></button>
         <?php endforeach; ?>
+        <span class="menu-tab-indicator" aria-hidden="true"></span>
     </div>
     <?php foreach ($menuCategories as $index => $category): ?>
         <section class="menu-panel" role="tabpanel" id="menu-panel-<?= e($category['category_id']) ?>" aria-labelledby="menu-tab-<?= e($category['category_id']) ?>"<?= $index === 0 ? '' : ' hidden' ?>>
@@ -25,7 +26,7 @@ $shortNames = ['Main Courses' => 'Mains', 'Appetizers & Soups' => 'Starters & so
                     $price = Money::fromPesos($item['price']);
                 ?>
                     <li class="menu-row" data-item data-item-id="<?= e($item['item_id']) ?>" data-price="<?= e($price) ?>" data-name="<?= e($item['name']) ?>">
-                        <img src="<?= e(menu_image($item['image'])) ?>" alt="" loading="lazy" width="96" height="96">
+                        <div class="menu-row-photo"><img src="<?= e(menu_image($item['image'])) ?>" alt="" loading="lazy" width="112" height="112"></div>
                         <div class="menu-row-body">
                             <h3><?= e($item['name']) ?></h3>
                             <p><?= e($item['description']) ?></p>

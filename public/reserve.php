@@ -69,7 +69,7 @@ $config = [
 $pageTitle = 'Reserve a table · Bella Vista Dining';
 $activePage = 'reserve';
 $flowPage = true;
-require __DIR__ . '/../templates/header.php';
+require __DIR__ . '/../includes/header.php';
 ?>
 <main id="main" class="flow" data-flow>
     <div class="appbar">
@@ -171,7 +171,7 @@ require __DIR__ . '/../templates/header.php';
                 <h1 class="flow-heading" id="h-menu" tabindex="-1">Something for everyone at your table.</h1>
                 <p class="flow-lede flow-lede-desktop">Pre-order now and the kitchen times it to your arrival. It’s optional: you can also order at the table.</p>
                 <p class="context-pill"><?= icon('calendar') ?><span data-context></span></p>
-                <?php $menuOrderable = true; require __DIR__ . '/../templates/partials/menu-list.php'; ?>
+                <?php $menuOrderable = true; require __DIR__ . '/../includes/partials/menu-list.php'; ?>
             </section>
 
             <!-- Step 3b: review the pre-order -->
@@ -252,5 +252,5 @@ require __DIR__ . '/../templates/header.php';
     </div>
 </main>
 <script>window.BV_RESERVE = <?= json_encode($config, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script>
-<script src="/public/assets/js/reserve.js?v=20261113b" defer></script>
-<?php require __DIR__ . '/../templates/footer.php'; ?>
+<script src="/public/assets/js/reserve.js?v=20261114d" defer></script>
+<?php require __DIR__ . '/../includes/footer.php'; ?>
