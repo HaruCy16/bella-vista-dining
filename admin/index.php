@@ -18,42 +18,54 @@ $isManager = Auth::isManager($admin);
     <link rel="stylesheet" href="/public/assets/css/app.css?v=20261114d">
 </head>
 <body class="admin">
-<header class="admin-bar">
-    <div class="wrap admin-bar-inner">
-        <p class="brand m-0"><?= brand_logo(44) ?><span>Operations</span></p>
-        <nav class="admin-tabs" role="tablist" aria-label="Dashboard sections">
-            <button role="tab" type="button" aria-selected="true" aria-controls="panel-tables" id="tab-tables" data-tab="tables">Tables</button>
-            <button role="tab" type="button" aria-selected="false" aria-controls="panel-kitchen" id="tab-kitchen" data-tab="kitchen" tabindex="-1">Kitchen <span class="count" data-queue-count></span></button>
-            <?php if ($isManager): ?>
-                <button role="tab" type="button" aria-selected="false" aria-controls="panel-report" id="tab-report" data-tab="report" tabindex="-1">Daily report</button>
-            <?php endif; ?>
-        </nav>
-        <div class="admin-user">
-            <span><?= e($admin['full_name']) ?> · <?= e($admin['role']) ?></span>
-            <form method="post" action="/admin/logout.php"><input type="hidden" name="_csrf" value="<?= e(Csrf::token()) ?>"><button class="text-link" type="submit">Sign out</button></form>
-        </div>
-    </div>
-</header>
+<div class="admin-shell">
+<aside class="admin-sidebar">
+    <div class="admin-sidebar-brand"><?= brand_logo(52) ?><span>DINING · EST. 2021</span></div>
+    <p class="admin-nav-label">Restaurant operations</p>
+    <nav class="admin-tabs" role="tablist" aria-label="Dashboard sections">
+        <button role="tab" type="button" aria-selected="true" aria-controls="panel-overview" id="tab-overview" data-tab="overview"><?= icon('home') ?> Overview</button>
+        <button role="tab" type="button" aria-selected="false" aria-controls="panel-reservations" id="tab-reservations" data-tab="reservations" tabindex="-1"><?= icon('calendar') ?> Reservations</button>
+        <button role="tab" type="button" aria-selected="false" aria-controls="panel-tables" id="tab-tables" data-tab="tables" tabindex="-1"><?= icon('users') ?> Tables</button>
+        <button role="tab" type="button" aria-selected="false" aria-controls="panel-kitchen" id="tab-kitchen" data-tab="kitchen" tabindex="-1"><?= icon('cloche') ?> Kitchen orders <span class="count" data-queue-count></span></button>
+        <button role="tab" type="button" aria-selected="false" aria-controls="panel-customers" id="tab-customers" data-tab="customers" tabindex="-1"><?= icon('users') ?> Customers</button>
+        <?php if ($isManager): ?>
+            <button role="tab" type="button" aria-selected="false" aria-controls="panel-report" id="tab-report" data-tab="report" tabindex="-1"><?= icon('chart') ?> Daily reports</button>
+            <button role="tab" type="button" aria-selected="false" aria-controls="panel-menu" id="tab-menu" data-tab="menu" tabindex="-1"><?= icon('utensils') ?> Menu availability</button>
+        <?php endif; ?>
+    </nav>
+    <div class="admin-sidebar-note"><strong>A little care, every service</strong><span>Tue–Sun · 10 AM–10 PM</span><span>Monday closed</span></div>
+    <div class="admin-sidebar-user"><span class="admin-avatar"><?= e(strtoupper(substr($admin['full_name'], 0, 1))) ?></span><span><strong><?= e($admin['full_name']) ?></strong><small><?= e(strtolower($admin['role'])) ?></small></span><form method="post" action="/admin/logout.php"><input type="hidden" name="_csrf" value="<?= e(Csrf::token()) ?>"><button class="text-link" type="submit">Sign out</button></form></div>
+</aside>
+<div class="admin-content">
+<header class="admin-bar"><div class="admin-bar-inner"><p class="admin-breadcrumb"><?= icon('sprout') ?> Bella Vista Dining / <strong>Operations</strong></p><span class="admin-live" data-live-date></span><span class="admin-role"><?= e($admin['role']) ?></span></div></header>
 
-<main class="wrap admin-main" id="main">
+<main class="admin-main" id="main">
     <p class="admin-status" data-sync aria-live="polite">Loading…</p>
     <p class="form-error" data-admin-error role="alert" hidden><?= icon('alert') ?><span></span></p>
 
-    <section id="panel-tables" role="tabpanel" aria-labelledby="tab-tables" data-panel="tables">
-        <h1 class="admin-h">Tables today</h1>
+    <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" data-panel="overview">
+        <div class="admin-heading-row"><div><h1 class="admin-h">Good afternoon, <?= e(explode(' ', trim($admin['full_name']))[0]) ?>.</h1><p class="text-muted">Your service at a glance. Keep every table, guest and order in rhythm.</p></div><button class="button button-primary" type="button" data-tab-jump="reservations"><?= icon('plus') ?> New reservation</button></div>
+        <div class="overview-stats" data-overview-stats></div>
+        <div class="overview-grid"><section class="admin-panel"><div class="panel-heading"><div><h2>Food sales by dining block</h2><p>Settled bills only · today</p></div></div><div class="sales-bars" data-sales-bars></div><p class="small text-muted">Consumable deposits are credited once. Extra-person fees are not food sales.</p></section><section class="admin-panel"><div class="panel-heading"><div><h2>The dining room</h2><p>Nine tables &amp; rooms, one service</p></div><button class="button button-small button-secondary" type="button" data-tab-jump="tables">View tables</button></div><div class="room-summary" data-room-summary></div></section></div>
+        <section class="admin-panel mt-6"><div class="panel-heading"><div><h2>Arrivals to look after</h2><p>Confirmed reservations · today</p></div><button class="button button-small button-secondary" type="button" data-tab-jump="reservations">All reservations</button></div><div class="table-scroll"><table class="data-table" data-overview-bookings><tbody></tbody></table></div></section>
+    </section>
+
+    <section id="panel-reservations" role="tabpanel" aria-labelledby="tab-reservations" data-panel="reservations" hidden>
+        <div class="admin-heading-row"><div><h1 class="admin-h">Reservations</h1><p class="text-muted">Today’s arrivals and service status.</p></div><button class="button button-primary" type="button">+ New reservation</button></div>
+        <div class="table-scroll"><table class="data-table" data-bookings><thead><tr><th>Time</th><th>Table</th><th>Guest</th><th>Guests</th><th>Status</th><th>Payment</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section id="panel-tables" role="tabpanel" aria-labelledby="tab-tables" data-panel="tables" hidden>
+        <div class="admin-heading-row"><div><h1 class="admin-h">Tables today</h1><p class="text-muted">Live floor status for the dining room.</p></div></div>
         <div class="board" data-board></div>
-        <h2 class="admin-h mt-10">Today's bookings</h2>
-        <div class="table-scroll"><table class="data-table" data-bookings>
-            <thead><tr><th scope="col">Time</th><th scope="col">Table</th><th scope="col">Guest</th><th scope="col">Guests</th><th scope="col">Status</th><th scope="col">Payment</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
-            <tbody></tbody>
-        </table></div>
     </section>
 
     <section id="panel-kitchen" role="tabpanel" aria-labelledby="tab-kitchen" data-panel="kitchen" hidden>
-        <h1 class="admin-h">Kitchen queue</h1>
-        <p class="text-muted">Pre-orders appear here an hour before the booking, or as soon as the guests are checked in.</p>
+        <div class="admin-heading-row"><div><h1 class="admin-h">Kitchen orders</h1><p class="text-muted">Pre-orders appear an hour before the booking, or when guests are checked in.</p></div></div>
         <div class="queue" data-queue></div>
     </section>
+
+    <section id="panel-customers" role="tabpanel" aria-labelledby="tab-customers" data-panel="customers" hidden><div class="admin-heading-row"><div><h1 class="admin-h">Customers</h1><p class="text-muted">Guests who have joined Bella Vista at the table.</p></div></div><div class="table-scroll"><table class="data-table" data-customers><tbody></tbody></table></div></section>
 
     <?php if ($isManager): ?>
         <section id="panel-report" role="tabpanel" aria-labelledby="tab-report" data-panel="report" hidden>
@@ -63,8 +75,10 @@ $isManager = Auth::isManager($admin);
             </div>
             <div data-report class="mt-6"></div>
         </section>
+        <section id="panel-menu" role="tabpanel" aria-labelledby="tab-menu" data-panel="menu" hidden><div class="admin-heading-row"><div><h1 class="admin-h">Menu availability</h1><p class="text-muted">Keep the public menu and kitchen in sync.</p></div></div><div class="menu-admin-grid" data-menu-admin></div></section>
     <?php endif; ?>
 </main>
+</div></div>
 <script src="/public/assets/js/admin.js?v=20261114d" defer></script>
 </body>
 </html>

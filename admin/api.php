@@ -29,12 +29,15 @@ Response::api(static function (): array {
         }
         $admin = Auth::requireRole(Auth::MANAGER, Auth::KITCHEN);
         $housekeeping = (new HousekeepingService(db()))->run($now);
+        $menu = new MenuRepository(db());
         return [
             'now' => $now->format('Y-m-d H:i:s'),
             'housekeeping' => $housekeeping,
             'board' => $ops->board($now),
             'queue' => $ops->kitchenQueue($now),
             'report' => Auth::isManager($admin) ? $ops->dailyReport($now->format('Y-m-d')) : null,
+            'customers' => Auth::isManager($admin) ? (new AdminRepository(db()))->customers() : [],
+            'menu' => Auth::isManager($admin) ? $menu->allItems() : [],
         ];
     }
 
@@ -62,6 +65,18 @@ Response::api(static function (): array {
             $status = $v->in('status', 'status', array_keys(OperationsService::ORDER_TRANSITIONS));
             $v->validate();
             $ops->setOrderStatus($id, $status, $now);
+            break;
+        case 'menu-availability':
+            Auth::requireRole(Auth::MANAGER);
+            $id = $v->int('item_id', 'Menu item', 1, PHP_INT_MAX);
+            $available = filter_var($input['available'] ?? null, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if ($available === null) {
+                throw ValidationException::field('available', 'Availability must be true or false.');
+            }
+            $v->validate();
+            if (!(new MenuRepository(db()))->setAvailability($id, $available)) {
+                throw new NotFoundException('Menu item not found.');
+            }
             break;
         default:
             throw new ValidationException('Unknown action.');

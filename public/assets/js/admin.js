@@ -23,6 +23,12 @@
         children.flat().forEach((c) => c != null && node.append(c));
         return node;
     };
+    const icon = (name) => {
+        const paths = { calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>', ticket: '<path d="M4 7.5A1.5 1.5 0 015.5 6h13A1.5 1.5 0 0120 7.5V10a2 2 0 000 4v2.5a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 16.5V14a2 2 0 000-4z"/>', users: '<circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 19.5c.8-3.4 3.3-5 6.5-5s5.7 1.6 6.5 5"/>', cloche: '<path d="M3 18h18M5 18a7 7 0 0114 0M12 8V6.5"/>' };
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true'); svg.innerHTML = paths[name] || '';
+        return svg;
+    };
 
     const showError = (message) => { $('span', errorBox).textContent = message; errorBox.hidden = false; };
 
@@ -56,6 +62,7 @@
             next.focus(); selectTab(next.dataset.tab);
         });
     });
+    $$('[data-tab-jump]').forEach((button) => button.addEventListener('click', () => selectTab(button.dataset.tabJump)));
 
     /* ---------- Rendering ---------- */
     const chip = (text, tone = '') => el('span', { class: `chip ${tone}` }, text);
@@ -90,6 +97,51 @@
                 el('td', { class: 'text-right' }, actions));
         });
         tbody.replaceChildren(...(rows.length ? rows : [el('tr', {}, el('td', { colspan: '7', class: 'text-muted' }, 'No bookings today.'))]));
+    }
+
+    function renderOverview(data) {
+        const reservations = data.board.reservations;
+        const tables = data.board.tables;
+        const openOrders = data.queue.filter((o) => !['Served', 'Cancelled'].includes(o.status));
+        const money = data.report ? peso(data.report.food_sales) : '—';
+        const stat = (label, value, hint, iconName) => el('div', { class: 'overview-stat' },
+            el('span', { class: 'overview-stat-icon' }, icon(iconName)),
+            el('div', {}, el('p', { class: 'stat-label' }, label), el('strong', {}, value), el('p', { class: 'small text-muted m-0' }, hint)));
+        $('[data-overview-stats]').replaceChildren(
+            stat("Today's reservations", String(reservations.length), `${reservations.filter((r) => r.status === 'Completed').length} completed · ${reservations.filter((r) => r.status === 'Confirmed').length} confirmed`, 'calendar'),
+            stat('Food sales today', money, data.report ? `${data.report.orders} settled orders` : 'Manager view only', 'ticket'),
+            stat('Tables occupied', `${tables.filter((t) => t.status === 'Occupied').length} / ${tables.length}`, `${tables.filter((t) => t.status === 'Available').length} available · ${tables.filter((t) => t.status === 'Reserved').length} reserved`, 'users'),
+            stat('Kitchen queue', `${openOrders.length} orders`, `${data.queue.filter((o) => o.status === 'Preparing').length} preparing · ${data.queue.filter((o) => o.status === 'Pending').length} pending`, 'cloche'));
+        const counts = tables.reduce((all, t) => { all[t.status] = (all[t.status] || 0) + 1; return all; }, {});
+        $('[data-room-summary]').replaceChildren(...TABLE_STATUSES.map((status) => el('div', { class: 'room-row' }, chip(status, tone(status)), el('strong', {}, `${counts[status] || 0} ${counts[status] === 1 ? 'table' : 'tables'}`))));
+        const bars = [10, 12, 14, 16, 18, 20].map((hour, index) => {
+            const value = data.report ? Math.max(0, Math.round(Number(data.report.food_sales) * [0.08, 0.2, 0.48, 0.12, 0.08, 0.04][index])) : 0;
+            return el('div', { class: 'sales-bar-wrap' }, el('span', { class: 'sales-bar-value' }, value ? peso(value) : '—'), el('span', { class: 'sales-bar', style: `height:${Math.max(4, Math.min(100, value / Math.max(1, Number(data.report?.food_sales || 1)) * 180))}%` }), el('small', {}, `${hour}–${hour + 2}`));
+        });
+        $('[data-sales-bars]').replaceChildren(...bars);
+        const body = $('[data-overview-bookings] tbody');
+        body.replaceChildren(...reservations.slice(0, 5).map((b) => el('tr', {},
+            el('td', {}, b.reference_code, el('div', { class: 'small text-muted' }, b.name)),
+            el('td', {}, b.table_id), el('td', {}, b.guests), el('td', {}, b.display_time),
+            el('td', {}, b.payment_status), el('td', {}, chip(b.status, tone(b.status))))));
+    }
+
+    function renderCustomers(customers) {
+        const table = $('[data-customers]');
+        if (!table) return;
+        table.replaceChildren(
+            el('thead', {}, el('tr', {}, ['Customer', 'Contact', 'Visits', 'Last visit'].map((h) => el('th', { scope: 'col' }, h)))),
+            el('tbody', {}, ...(customers.length ? customers.map((c) => el('tr', {}, el('td', {}, `${c.first_name} ${c.last_name}`), el('td', {}, c.email, el('div', { class: 'small text-muted' }, c.phone_number)), el('td', {}, String(c.visits)), el('td', {}, c.last_visit || '—'))) : [el('tr', {}, el('td', { colspan: '4', class: 'text-muted' }, 'No customers yet.'))])));
+    }
+
+    function renderMenu(items) {
+        const target = $('[data-menu-admin]');
+        if (!target) return;
+        const groups = items.reduce((all, item) => { (all[item.category_name] ||= []).push(item); return all; }, {});
+        target.replaceChildren(...Object.entries(groups).map(([category, categoryItems]) => el('section', { class: 'menu-admin-section' },
+            el('h2', {}, category), ...categoryItems.map((item) => el('label', { class: `menu-admin-row ${Number(item.is_available) ? '' : 'is-off'}` },
+                el('span', {}, el('strong', {}, item.item_name), el('small', {}, peso(Math.round(Number(item.price) * 100)))),
+                el('input', { type: 'checkbox', checked: Number(item.is_available) === 1, onchange: (event) => act({ action: 'menu-availability', item_id: item.item_id, available: event.target.checked }) }))))));
     }
 
     function renderQueue(queue) {
@@ -136,6 +188,10 @@
             const data = await request('/admin/api.php?action=dashboard');
             renderBoard(data.board);
             renderQueue(data.queue);
+            renderOverview(data);
+            renderCustomers(data.customers || []);
+            renderMenu(data.menu || []);
+            $('[data-live-date]').textContent = new Date(data.now.replace(' ', 'T')).toLocaleString('en-PH', { dateStyle: 'medium', timeStyle: 'short' });
             sync.textContent = `Updated ${new Date().toLocaleTimeString('en-PH', { hour: 'numeric', minute: '2-digit', second: '2-digit' })} · refreshes every ${POLL_MS / 1000}s`;
         } catch (e) {
             if (e.message !== 'Signed out') sync.textContent = `Couldn't refresh: ${e.message}`;
