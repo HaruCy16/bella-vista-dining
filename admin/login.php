@@ -38,7 +38,9 @@ if (Request::method() === 'POST') {
 </head>
 <body class="admin-auth">
 <main class="admin-auth-card">
-    <?= brand_logo(96) ?>
+    <aside class="admin-auth-brand"><?= brand_logo(96) ?><p class="admin-auth-kicker">THE ART OF A WELL-RUN SERVICE</p><h2>Warm welcomes.<br>Seamless service.</h2><p>One thoughtful workspace for the people behind every memorable meal.</p><small>Filipino comfort food &amp; continental specialties<br>Tue–Sun · 10 AM–10 PM</small></aside>
+    <section class="admin-auth-form">
+    <div class="admin-lock" aria-hidden="true"><?= icon('lock') ?></div>
     <h1 class="mt-6 text-[2rem] leading-tight">Staff sign-in</h1>
     <p class="text-muted mt-1">Managers and kitchen staff only.</p>
     <?php if ($error): ?>
@@ -50,6 +52,8 @@ if (Request::method() === 'POST') {
         <label class="field"><span>Password</span><input type="password" name="password" required autocomplete="current-password" <?= $username !== '' ? 'autofocus' : '' ?>></label>
         <button class="button button-primary" type="submit">Sign in</button>
     </form>
+    <p class="admin-auth-foot">Secure staff access · Bella Vista Dining</p>
+    </section>
 </main>
 </body>
 </html>

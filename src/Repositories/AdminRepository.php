@@ -33,6 +33,17 @@ final class AdminRepository
         return (bool) $statement->fetchColumn();
     }
 
+    /** @return list<array<string, mixed>> */
+    public function customers(): array
+    {
+        return $this->pdo->query(
+            'SELECT c.customer_id, c.first_name, c.last_name, c.email, c.phone_number,
+                    COUNT(r.reservation_id) AS visits, MAX(r.reservation_date) AS last_visit
+             FROM customers c LEFT JOIN reservations r ON r.customer_id = c.customer_id
+             GROUP BY c.customer_id ORDER BY last_visit DESC, c.last_name, c.first_name'
+        )->fetchAll();
+    }
+
     /** @return array<string, mixed> */
     public function report(string $date): array
     {

@@ -63,4 +63,27 @@ final class MenuRepository
         }
         return array_values($categories);
     }
+
+    /** @return list<array<string, mixed>> */
+    public function allItems(): array
+    {
+        return $this->pdo->query(
+            'SELECT i.item_id, i.item_name, i.description, i.price, i.is_available,
+                    c.category_name
+             FROM menu_items i INNER JOIN menu_categories c ON c.category_id = i.category_id
+             ORDER BY c.sort_order, c.category_id, i.item_name'
+        )->fetchAll();
+    }
+
+    public function setAvailability(int $itemId, bool $available): bool
+    {
+        $statement = $this->pdo->prepare('UPDATE menu_items SET is_available = :available WHERE item_id = :id');
+        $statement->execute(['available' => (int) $available, 'id' => $itemId]);
+        if ($statement->rowCount() === 1) {
+            return true;
+        }
+        $exists = $this->pdo->prepare('SELECT 1 FROM menu_items WHERE item_id = :id');
+        $exists->execute(['id' => $itemId]);
+        return (bool) $exists->fetchColumn();
+    }
 }

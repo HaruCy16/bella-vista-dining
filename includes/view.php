@@ -60,6 +60,8 @@ function icon(string $name, string $class = 'icon', ?string $label = null): stri
         'utensils' => '<path d="M7 3v8M4.5 3v5a2.5 2.5 0 005 0V3M7 11v10"/><path d="M17 21V3c-2.2 1.2-3.5 3.6-3.5 7v3H17"/>',
         'ticket' => '<path d="M4 7.5A1.5 1.5 0 015.5 6h13A1.5 1.5 0 0120 7.5V10a2 2 0 000 4v2.5a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 16.5V14a2 2 0 000-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/>',
         'cloche' => '<path d="M3 18h18M5 18a7 7 0 0114 0M12 8V6.5M10.5 6.5h3"/>',
+        'chart' => '<path d="M4 19V5M4 19h16M8 16v-4M12 16V8M16 16v-7"/>',
+        'lock' => '<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/>',
     ];
     $a11y = $label === null ? 'aria-hidden="true"' : 'role="img" aria-label="' . e($label) . '"';
     return '<svg class="' . e($class) . '" ' . $a11y . ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">'
