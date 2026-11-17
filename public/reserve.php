@@ -96,11 +96,12 @@ require __DIR__ . '/../includes/header.php';
                     <div class="cal-head">
                         <p class="label m-0" data-cal-month></p>
                         <div class="cal-nav">
-                            <button type="button" data-cal-prev aria-label="Previous week"><?= icon('chevron-left') ?></button>
-                            <button type="button" data-cal-next aria-label="Next week"><?= icon('chevron-right') ?></button>
+                            <button type="button" data-cal-prev aria-label="Previous month"><?= icon('chevron-left') ?></button>
+                            <button type="button" data-cal-next aria-label="Next month"><?= icon('chevron-right') ?></button>
                         </div>
                     </div>
-                    <div class="cal-week" role="radiogroup" aria-label="Date" data-cal-days></div>
+                    <div class="cal-weekdays" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                    <div class="cal-month" role="radiogroup" aria-label="Date" data-cal-days></div>
                     <p class="cal-note">Mondays unavailable · Restaurant closed</p>
                 </div>
 
@@ -252,5 +253,5 @@ require __DIR__ . '/../includes/header.php';
     </div>
 </main>
 <script>window.BV_RESERVE = <?= json_encode($config, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script>
-<script src="/public/assets/js/reserve.js?v=20261114d" defer></script>
+<script src="/public/assets/js/reserve.js?v=20261118c" defer></script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>

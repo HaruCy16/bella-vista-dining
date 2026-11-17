@@ -11,6 +11,9 @@
     const sync = $('[data-sync]');
     let timer = null;
     let busy = false;
+    let menuItems = [];
+    let menuQuery = '';
+    let menuFilter = 'all';
 
     const el = (tag, attrs = {}, ...children) => {
         const node = document.createElement(tag);
@@ -24,7 +27,7 @@
         return node;
     };
     const icon = (name) => {
-        const paths = { calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>', ticket: '<path d="M4 7.5A1.5 1.5 0 015.5 6h13A1.5 1.5 0 0120 7.5V10a2 2 0 000 4v2.5a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 16.5V14a2 2 0 000-4z"/>', users: '<circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 19.5c.8-3.4 3.3-5 6.5-5s5.7 1.6 6.5 5"/>', cloche: '<path d="M3 18h18M5 18a7 7 0 0114 0M12 8V6.5"/>' };
+        const paths = { calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>', ticket: '<path d="M4 7.5A1.5 1.5 0 015.5 6h13A1.5 1.5 0 0120 7.5V10a2 2 0 000 4v2.5a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 16.5V14a2 2 0 000-4z"/>', users: '<circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 19.5c.8-3.4 3.3-5 6.5-5s5.7 1.6 6.5 5"/>', cloche: '<path d="M3 18h18M5 18a7 7 0 0114 0M12 8V6.5"/>', utensils: '<path d="M7 3v8M4.5 3v5a2.5 2.5 0 005 0V3M7 11v10"/><path d="M17 21V3c-2.2 1.2-3.5 3.6-3.5 7v3H17"/>' };
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true'); svg.innerHTML = paths[name] || '';
         return svg;
@@ -137,11 +140,53 @@
     function renderMenu(items) {
         const target = $('[data-menu-admin]');
         if (!target) return;
-        const groups = items.reduce((all, item) => { (all[item.category_name] ||= []).push(item); return all; }, {});
-        target.replaceChildren(...Object.entries(groups).map(([category, categoryItems]) => el('section', { class: 'menu-admin-section' },
-            el('h2', {}, category), ...categoryItems.map((item) => el('label', { class: `menu-admin-row ${Number(item.is_available) ? '' : 'is-off'}` },
-                el('span', {}, el('strong', {}, item.item_name), el('small', {}, peso(Math.round(Number(item.price) * 100)))),
-                el('input', { type: 'checkbox', checked: Number(item.is_available) === 1, onchange: (event) => act({ action: 'menu-availability', item_id: item.item_id, available: event.target.checked }) }))))));
+        if (items) menuItems = items;
+        const available = menuItems.filter((item) => Number(item.is_available) === 1).length;
+        const summary = $('[data-menu-summary]');
+        if (summary) {
+            summary.replaceChildren(
+                el('strong', {}, `${menuItems.length} items`),
+                el('span', { class: 'menu-summary-available' }, `${available} available`),
+                el('span', { class: 'menu-summary-sold' }, `${menuItems.length - available} sold out`),
+            );
+        }
+        const visibleItems = menuItems.filter((item) => {
+            const matchesQuery = menuQuery === '' || `${item.item_name} ${item.description}`.toLowerCase().includes(menuQuery);
+            const matchesFilter = menuFilter === 'all'
+                || (menuFilter === 'available' && Number(item.is_available) === 1)
+                || (menuFilter === 'sold-out' && Number(item.is_available) !== 1);
+            return matchesQuery && matchesFilter;
+        });
+        const groups = visibleItems.reduce((all, item) => { (all[item.category_name] ||= []).push(item); return all; }, {});
+        const categoryTitle = (category) => ({
+            'Main Courses': 'Main Courses and Specialties',
+            'Appetizers & Soups': 'Appetizers and Soups',
+            'Desserts & Drinks': 'Desserts and Drinks',
+        }[category] ?? category);
+        const sections = Object.entries(groups).map(([category, categoryItems]) => {
+            const rows = categoryItems.map((item) => {
+                const isAvailable = Number(item.is_available) === 1;
+                const toggle = el('input', {
+                    type: 'checkbox',
+                    checked: isAvailable,
+                    'aria-label': `${item.item_name}: ${isAvailable ? 'available' : 'sold out'}`,
+                    onchange: (event) => act({ action: 'menu-availability', item_id: item.item_id, available: event.target.checked }),
+                });
+                return el('div', { class: `menu-admin-row ${isAvailable ? '' : 'is-off'}` },
+                    el('div', { class: 'menu-item-name' }, el('strong', {}, item.item_name), el('small', {}, item.description)),
+                    el('strong', { class: 'menu-item-price' }, peso(Math.round(Number(item.price) * 100))),
+                    chip(isAvailable ? 'Available' : 'Sold out', isAvailable ? 'chip-ok' : 'chip-danger'),
+                    el('label', { class: 'menu-switch' }, toggle, el('span', { 'aria-hidden': 'true' }), el('small', {}, isAvailable ? 'On' : 'Off')));
+            });
+            return el('section', { class: 'menu-admin-section' },
+                el('div', { class: 'menu-admin-section-heading' },
+                    el('div', {}, el('h2', {}, categoryTitle(category)), el('p', {}, `${categoryItems.length} items · ${categoryItems.filter((item) => Number(item.is_available) === 1).length} available`))
+                ),
+                el('div', { class: 'menu-admin-table-wrap' },
+                    el('div', { class: 'menu-admin-table-head', role: 'row' }, el('span', {}, 'Menu item'), el('span', {}, 'Price'), el('span', {}, 'Status'), el('span', {}, 'Availability')),
+                    ...rows));
+        });
+        target.replaceChildren(...(sections.length ? sections : [el('p', { class: 'menu-empty text-muted' }, 'No menu items match these filters.')]));
     }
 
     function renderQueue(queue) {
@@ -180,6 +225,14 @@
         catch (e) { showError(e.message); }
     }
     $('[data-report-date]')?.addEventListener('change', loadReport);
+    $('[data-menu-search]')?.addEventListener('input', (event) => {
+        menuQuery = event.target.value.trim().toLowerCase();
+        renderMenu();
+    });
+    $('[data-menu-filter]')?.addEventListener('change', (event) => {
+        menuFilter = event.target.value;
+        renderMenu();
+    });
 
     async function refresh() {
         if (busy) return;

@@ -28,6 +28,8 @@
     const toDate = (iso) => new Date(iso + 'T00:00:00Z');
     const toIso = (date) => date.toISOString().slice(0, 10);
     const addDays = (iso, days) => { const d = toDate(iso); d.setUTCDate(d.getUTCDate() + days); return toIso(d); };
+    const addMonths = (iso, months) => { const d = toDate(iso); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() + months); return toIso(d); };
+    const firstOfMonth = (iso) => `${iso.slice(0, 7)}-01`;
     const isoWeekday = (iso) => toDate(iso).getUTCDay() || 7;
     const fmt = (iso, options) => toDate(iso).toLocaleDateString('en-PH', { timeZone: 'UTC', ...options });
     const lastDate = addDays(C.today, C.windowDays);
@@ -91,12 +93,13 @@
     const clearError = () => { errorBox.hidden = true; };
 
     /* ---------- Step 1: calendar, party, time ---------- */
-    let weekStart = mondayOf(state.date);
+    let calendarMonth = firstOfMonth(state.date);
 
     function renderVisit() {
         const days = $('[data-cal-days]');
-        days.replaceChildren(...Array.from({ length: 7 }, (_, i) => {
-            const iso = addDays(weekStart, i);
+        const gridStart = mondayOf(calendarMonth);
+        days.replaceChildren(...Array.from({ length: 42 }, (_, i) => {
+            const iso = addDays(gridStart, i);
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'cal-day';
@@ -106,13 +109,13 @@
             button.dataset.date = iso;
             button.disabled = !dateOpen(iso);
             button.classList.toggle('is-closed', isoWeekday(iso) === C.closedWeekday);
+            button.classList.toggle('is-outside', iso.slice(0, 7) !== calendarMonth.slice(0, 7));
             button.innerHTML = `<small>${fmt(iso, { weekday: 'short' })}</small><b>${toDate(iso).getUTCDate()}</b>`;
             return button;
         }));
-        const shown = state.date >= weekStart && state.date <= addDays(weekStart, 6) ? state.date : weekStart;
-        $('[data-cal-month]').textContent = fmt(shown, { month: 'long', year: 'numeric' });
-        $('[data-cal-prev]').disabled = weekStart <= mondayOf(C.today);
-        $('[data-cal-next]').disabled = addDays(weekStart, 7) > lastDate;
+        $('[data-cal-month]').textContent = fmt(calendarMonth, { month: 'long', year: 'numeric' });
+        $('[data-cal-prev]').disabled = calendarMonth <= firstOfMonth(C.today);
+        $('[data-cal-next]').disabled = calendarMonth >= firstOfMonth(lastDate);
 
         $('[data-guests-value]').textContent = plural(state.guests, 'guest', 'guests');
         $('[data-guests="-1"]').disabled = state.guests <= C.minGuests;
@@ -134,8 +137,8 @@
             changed();
             return;
         }
-        if (event.target.closest('[data-cal-prev]')) { weekStart = addDays(weekStart, -7); renderVisit(); return; }
-        if (event.target.closest('[data-cal-next]')) { weekStart = addDays(weekStart, 7); renderVisit(); return; }
+        if (event.target.closest('[data-cal-prev]')) { calendarMonth = addMonths(calendarMonth, -1); renderVisit(); return; }
+        if (event.target.closest('[data-cal-next]')) { calendarMonth = addMonths(calendarMonth, 1); renderVisit(); return; }
         const guests = event.target.closest('[data-guests]');
         if (guests) {
             state.guests = clampGuests(state.guests + Number(guests.dataset.guests));
@@ -369,7 +372,7 @@
             if (crumb.dataset.crumb.split(' ').includes(step)) crumb.setAttribute('aria-current', 'step'); else crumb.removeAttribute('aria-current');
         });
         document.body.dataset.step = step;
-        if (step === 'visit') weekStart = mondayOf(state.date);
+        if (step === 'visit') calendarMonth = firstOfMonth(state.date);
         clearError();
         renderAll();
         if (step === 'seating') loadAvailability();

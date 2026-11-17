@@ -49,6 +49,7 @@ function icon(string $name, string $class = 'icon', ?string $label = null): stri
         'calendar' => '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
         'pin' => '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0114 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
         'alert' => '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5.5M12 16.2v.3"/>',
+        'info' => '<circle cx="12" cy="12" r="8.5"/><path d="M12 10.5v5M12 7.5v.3"/>',
         'arrow-left' => '<path d="M19 12H5M11 6l-6 6 6 6"/>',
         'arrow-up-right' => '<path d="M7 17L17 7M8 7h9v9"/>',
         'chevron-left' => '<path d="M15 6l-6 6 6 6"/>',

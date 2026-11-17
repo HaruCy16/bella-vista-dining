@@ -15,7 +15,7 @@ $isManager = Auth::isManager($admin);
     <meta name="csrf-token" content="<?= e(Csrf::token()) ?>">
     <title>Operations · Bella Vista Dining</title>
     <?= brand_head_tags() ?>
-    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261114d">
+    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261118b">
 </head>
 <body class="admin">
 <div class="admin-shell">
@@ -75,10 +75,24 @@ $isManager = Auth::isManager($admin);
             </div>
             <div data-report class="mt-6"></div>
         </section>
-        <section id="panel-menu" role="tabpanel" aria-labelledby="tab-menu" data-panel="menu" hidden><div class="admin-heading-row"><div><h1 class="admin-h">Menu availability</h1><p class="text-muted">Keep the public menu and kitchen in sync.</p></div></div><div class="menu-admin-grid" data-menu-admin></div></section>
+        <section id="panel-menu" role="tabpanel" aria-labelledby="tab-menu" data-panel="menu" hidden>
+            <div class="admin-heading-row">
+                <div><h1 class="admin-h">What's on the menu</h1><p class="text-muted">Keep today's availability clear for reservations, pre-orders and the kitchen.</p></div>
+            </div>
+            <div class="menu-admin-toolbar">
+                <label class="field"><span>Find a menu item</span><input type="search" data-menu-search placeholder="Search dishes or drinks"></label>
+                <label class="field"><span>Availability</span><select data-menu-filter><option value="all">All items</option><option value="available">Available</option><option value="sold-out">Sold out</option></select></label>
+                <div class="menu-admin-summary" data-menu-summary aria-live="polite"></div>
+            </div>
+            <div class="menu-admin-notice">
+                <?= icon('info') ?>
+                <span>Turn off an item to mark it as sold out for new orders and pre-orders. Previously recorded orders keep their original items and amounts.</span>
+            </div>
+            <div class="menu-admin-grid" data-menu-admin></div>
+        </section>
     <?php endif; ?>
 </main>
 </div></div>
-<script src="/public/assets/js/admin.js?v=20261114d" defer></script>
+<script src="/public/assets/js/admin.js?v=20261118b" defer></script>
 </body>
 </html>

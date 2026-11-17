@@ -28,7 +28,7 @@ $nav = [
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261114d">
+    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261118c">
 </head>
 <body class="<?= $flowPage ? 'is-flow' : 'has-tabbar' ?>">
     <a class="skip-link" href="#main">Skip to content</a>
