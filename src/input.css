@@ -201,17 +201,14 @@
   .table-type-note { @apply m-0 mt-1 text-small text-muted; }
 
   /* "There's a table for every gathering" quick picker (plain GET form to the booking flow) */
-  .gathering { @apply grid items-start gap-8 lg:grid-cols-[1.1fr_1.1fr_1fr] lg:gap-10; }
+  .gathering { @apply grid items-start gap-8 lg:grid-cols-[1fr_1.3fr] lg:gap-16; }
   .gathering h2 { @apply m-0 mt-2 text-heading-lg; }
   .gathering-hours { @apply m-0 mt-4 font-semibold; }
   .gathering .hint { @apply mt-1; }
   .gathering-section { @apply py-16 lg:py-20; }
   .gathering fieldset { @apply m-0 min-w-0 border-0 p-0; }
   .gathering legend { @apply mb-3 p-0 text-small font-semibold; }
-  .gathering .cal-week { @apply mt-3; }
   .cal-day.is-off { @apply cursor-not-allowed opacity-40; }
-  .gathering-days.card { @apply sm:p-4; }
-  .gathering-days .button { @apply mt-4; }
 
   /* Policies */
   .policies { @apply grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16; }

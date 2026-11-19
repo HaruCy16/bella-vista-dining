@@ -22,9 +22,6 @@ $now = Config::now();
 $slots = Config::reservationSlots();
 $opens = Config::displayTime(Config::OPENS_AT);
 $closes = Config::displayTime(Config::CLOSES_AT);
-$lastSlotPassed = $now->format('H:i:s') >= end($slots);
-$firstOpen = Config::nextOpenDates(1, $lastSlotPassed ? $now->modify('+1 day') : $now)[0];
-$week = array_map(static fn (int $i) => $firstOpen->modify('monday this week')->modify("+{$i} days"), range(0, 6));
 
 // "S1–S4", "F1–F3", "Room 1–2" from the actual tables.
 $tableRange = static function (string $typeName) use ($tables): string {
@@ -172,7 +169,7 @@ require __DIR__ . '/includes/header.php';
         </div>
     </section>
 
-    <!-- Pick a day, then a block: opens the booking flow with both filled in. -->
+    <!-- Pick a block: opens the booking flow with the time filled in. -->
     <section class="wrap gathering-section" aria-labelledby="gathering-title">
         <form class="gathering reveal" action="/public/reserve.php" method="get">
             <div>
@@ -188,23 +185,6 @@ require __DIR__ . '/includes/header.php';
                         <button class="slot" type="submit" name="time" value="<?= e($slot) ?>"><?= e(Config::slotLabel($slot)) ?></button>
                     <?php endforeach; ?>
                 </div>
-            </fieldset>
-            <fieldset class="card gathering-days">
-                <legend class="sr-only">Day</legend>
-                <div class="cal-head"><p class="label m-0"><?= e($firstOpen->format('F Y')) ?></p></div>
-                <div class="cal-week">
-                    <?php foreach ($week as $day):
-                        $iso = $day->format('Y-m-d');
-                        $closed = (int) $day->format('N') === Config::CLOSED_WEEKDAY;
-                        $off = $closed || $iso < $firstOpen->format('Y-m-d');
-                    ?>
-                        <label class="cal-day<?= $closed ? ' is-closed' : '' ?><?= $off ? ' is-off' : '' ?>">
-                            <input type="radio" name="date" value="<?= e($iso) ?>"<?= $iso === $firstOpen->format('Y-m-d') ? ' checked' : '' ?><?= $off ? ' disabled' : '' ?>>
-                            <small><?= e($day->format('D')) ?></small><b><?= e($day->format('j')) ?></b>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
-                <p class="cal-note">Mondays unavailable · Restaurant closed</p>
             </fieldset>
         </form>
     </section>
