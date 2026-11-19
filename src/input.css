@@ -491,6 +491,13 @@
   .booking-page { @apply max-w-[760px] py-12 lg:py-16; }
   .lookup-form { @apply mt-8 grid gap-3 rounded-card border border-line bg-paper p-5 sm:grid-cols-[1fr_1.4fr_auto] sm:items-end; }
   .booking-card { @apply mt-8 grid gap-4 rounded-card border border-line bg-paper p-5 sm:p-7; }
+  .my-bookings { @apply mt-8 grid gap-6; }
+  .mb-heading { @apply m-0 mb-3 font-sans text-base font-semibold text-ink; }
+  .mb-list { @apply m-0 grid list-none gap-2 p-0; }
+  .mb-item { @apply flex items-center justify-between gap-4 rounded-card border border-line bg-paper p-4 no-underline text-ink; }
+  .mb-main { @apply grid gap-1; }
+  .mb-main small { @apply text-muted; }
+  .mb-item:focus-visible { @apply outline outline-2 outline-offset-2 outline-forest; }
   .booking-card-head { @apply flex items-start justify-between gap-4; }
   .booking-card .reference { @apply my-1; }
   .booking-when { @apply m-0 font-serif text-heading leading-snug; }

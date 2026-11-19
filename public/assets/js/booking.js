@@ -6,6 +6,7 @@
     const peso = (c) => '₱' + (c / 100).toLocaleString('en-PH', { minimumFractionDigits: c % 100 ? 2 : 0, maximumFractionDigits: 2 });
     const card = $('[data-booking]');
     const lookupForm = $('[data-lookup]');
+    const list = $('[data-my-bookings]');
     let email = '';
 
     const el = (tag, attrs = {}, ...children) => {
@@ -105,7 +106,7 @@
         const minimum = b.minimum_order > 0 && b.order_total === 0 && live
             ? el('p', { class: 'hint' }, `Standard tables have a ${peso(b.minimum_order)} minimum food order, settled when you're seated.`) : null;
 
-        card.replaceChildren(
+        card.replaceChildren(...[
             el('div', { class: 'booking-card-head' },
                 el('div', {}, el('p', { class: 'small m-0 text-muted' }, 'Reference'), el('p', { class: 'reference m-0' }, b.reference_code)),
                 el('span', { class: `chip ${tone}` }, label)),
@@ -113,9 +114,12 @@
             el('p', { class: 'm-0 text-muted' }, `${b.name} · ${b.number_of_guests} ${b.number_of_guests === 1 ? 'guest' : 'guests'} · ${b.table_type} table ${b.table_id}`),
             b.items.length ? el('ul', { class: 'booking-items' }, b.items.map((i) => el('li', {}, el('span', {}, `${i.quantity}× ${i.name}`), el('span', {}, peso(i.subtotal))))) : null,
             money, minimum, error, actions.childElementCount ? actions : null, cancelBox,
-        );
+        ].filter(Boolean));
         card.hidden = false;
         lookupForm.hidden = true;
+        if (list) list.hidden = true;
+        const back = $('[data-back]');
+        if (back) back.hidden = false;
     }
 
     function row(term, value) {
