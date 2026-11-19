@@ -16,15 +16,15 @@ if (Request::method() === 'POST') {
         $admin = (new AdminAuthService(db()))->attempt($username, (string) ($_POST['password'] ?? ''), Request::ip());
         Auth::signIn($admin);
         Response::redirect('/admin/index.php');
-    } catch (AppException $exception) {
+    } catch (AppException $exception) { 
         http_response_code($exception->status());
         $error = $exception->getMessage();
     } catch (Throwable $exception) {
         error_log('[admin login] ' . $exception->getMessage());
-        http_response_code(500);
+        http_response_code(500);  
         $error = 'Sign-in is unavailable right now. Please try again.';
     }
-}
+} 
 ?>
 <!doctype html>
 <html lang="en">

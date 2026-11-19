@@ -47,6 +47,12 @@ docker compose down -v          # stop AND delete the database (next start re-se
 docker compose logs -f app      # PHP / Apache errors
 ```
 
+Remove one test reservation and its related payments, orders, and customer record:
+
+```bash
+docker compose exec app php scripts/cleanup-test-booking.php 4AAZLJWV
+```
+
 ### Configuration (.env)
 
 Every setting has a working default in `docker-compose.yml`. To change one,

@@ -6,7 +6,6 @@
     const peso = (c) => '₱' + (c / 100).toLocaleString('en-PH', { minimumFractionDigits: c % 100 ? 2 : 0, maximumFractionDigits: 2 });
     const card = $('[data-booking]');
     const lookupForm = $('[data-lookup]');
-    const list = $('[data-my-bookings]');
     let email = '';
 
     const el = (tag, attrs = {}, ...children) => {
@@ -117,7 +116,6 @@
         ].filter(Boolean));
         card.hidden = false;
         lookupForm.hidden = true;
-        if (list) list.hidden = true;
         const back = $('[data-back]');
         if (back) back.hidden = false;
     }
@@ -136,7 +134,7 @@
         button.disabled = true;
         try {
             const booking = await api('/public/api/reservations.php', { action: 'lookup', reference_code: form.elements.reference_code.value.trim(), email });
-            history.replaceState(null, '', `?ref=${encodeURIComponent(booking.reference_code)}`);
+            history.replaceState(null, '', '/public/booking.php');
             render(booking);
         } catch (e) {
             $('span', error).textContent = e.message;

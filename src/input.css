@@ -201,7 +201,8 @@
   .table-type-note { @apply m-0 mt-1 text-small text-muted; }
 
   /* "There's a table for every gathering" quick picker (plain GET form to the booking flow) */
-  .gathering { @apply grid items-start gap-8 lg:grid-cols-[1fr_1.3fr] lg:gap-16; }
+  .gathering { @apply grid items-start gap-8 lg:grid-cols-2 lg:gap-12; }
+  .gathering .slot-grid { @apply grid-cols-2 gap-3; }
   .gathering h2 { @apply m-0 mt-2 text-heading-lg; }
   .gathering-hours { @apply m-0 mt-4 font-semibold; }
   .gathering .hint { @apply mt-1; }

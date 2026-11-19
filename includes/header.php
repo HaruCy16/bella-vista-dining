@@ -7,7 +7,7 @@ $flowPage = $flowPage ?? false; // booking flow: its own app bar on mobile, no t
 $nav = [
     'about' => ['Our story', '/public/about.php'],
     'menu' => ['Menu & preorder', '/public/menu.php'],
-    'booking' => ['My bookings', '/public/booking.php'],
+    'booking' => ['Check my Bookings', '/public/booking.php'],
     'reserve' => ['Reserve a table', '/public/reserve.php'],
 ];
 ?>
