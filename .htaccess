@@ -10,7 +10,7 @@ RewriteEngine On
 RewriteRule (^|/)\. - [F,L]
 
 # Private folders (PHP still require()s them from disk).
-RewriteRule ^(database|includes|src|tests|scripts|docker|sketch|vendor|node_modules)(/|$) - [F,L]
+RewriteRule ^(database|docs|includes|src|tests|scripts|docker|sketch|vendor|node_modules)(/|$) - [F,L]
 
 # Project and tooling files in the root.
 RewriteRule ^(Dockerfile|docker-compose\.yml|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml(\.dist)?|tailwind\.config\.js|postcss\.config\.js|[^/]+\.(md|drawio|xlsx|sql|log))$ - [F,L]
