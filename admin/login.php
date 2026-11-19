@@ -34,7 +34,7 @@ if (Request::method() === 'POST') {
     <meta name="robots" content="noindex">
     <title>Staff sign-in · Bella Vista Dining</title>
     <?= brand_head_tags() ?>
-    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261119g">
+    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261119h">
 </head>
 <body class="admin-auth">
 <main class="admin-auth-card">

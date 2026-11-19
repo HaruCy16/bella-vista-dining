@@ -4983,12 +4983,11 @@ video {
   border-color: rgb(var(--line) / var(--tw-border-opacity, 1));
   --tw-bg-opacity: 1;
   background-color: rgb(var(--paper) / var(--tw-bg-opacity, 1));
-  padding: 1.25rem; border-top: 3px solid rgb(var(--line));
+  padding: 1.25rem;
 }
-  .board-card.status-available { border-top-color: #4C9A6A; }
-  .board-card.status-reserved { border-top-color: #E0A100; }
-  .board-card.status-occupied { border-top-color: #5B8DB8; }
-  .board-card.status-clean-up { border-top-color: #8A8A8A; }
+  /* Status shows on the whole outline (1px, tinted), never as a thick edge on a rounded card; the chip names it. */
+  .board-card.status-reserved { border-color: rgb(224 161 0 / 0.55); }
+  .board-card.status-occupied { border-color: rgb(91 141 184 / 0.55); }
   .board-card-head {
   display: flex;
   align-items: center;

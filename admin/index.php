@@ -10,7 +10,7 @@ $hour = (int) $now->format('G');
 $greeting = $hour < 12 ? 'Good morning' : ($hour < 18 ? 'Good afternoon' : 'Good evening');
 $firstName = explode(' ', trim($admin['full_name']))[0];
 $slots = Config::reservationSlots();
-$asset = '?v=20261119g';
+$asset = '?v=20261119h';
 ?>
 <!doctype html>
 <html lang="en">
