@@ -201,17 +201,15 @@
   .table-type-note { @apply m-0 mt-1 text-small text-muted; }
 
   /* "There's a table for every gathering" quick picker (plain GET form to the booking flow) */
-  .gathering { @apply grid items-start gap-8 lg:grid-cols-[1.1fr_1.1fr_1fr] lg:gap-10; }
+  .gathering { @apply grid items-start gap-8 lg:grid-cols-2 lg:gap-12; }
+  .gathering .slot-grid { @apply grid-cols-2 gap-3; }
   .gathering h2 { @apply m-0 mt-2 text-heading-lg; }
   .gathering-hours { @apply m-0 mt-4 font-semibold; }
   .gathering .hint { @apply mt-1; }
   .gathering-section { @apply py-16 lg:py-20; }
   .gathering fieldset { @apply m-0 min-w-0 border-0 p-0; }
   .gathering legend { @apply mb-3 p-0 text-small font-semibold; }
-  .gathering .cal-week { @apply mt-3; }
   .cal-day.is-off { @apply cursor-not-allowed opacity-40; }
-  .gathering-days.card { @apply sm:p-4; }
-  .gathering-days .button { @apply mt-4; }
 
   /* Policies */
   .policies { @apply grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16; }
@@ -491,6 +489,13 @@
   .booking-page { @apply max-w-[760px] py-12 lg:py-16; }
   .lookup-form { @apply mt-8 grid gap-3 rounded-card border border-line bg-paper p-5 sm:grid-cols-[1fr_1.4fr_auto] sm:items-end; }
   .booking-card { @apply mt-8 grid gap-4 rounded-card border border-line bg-paper p-5 sm:p-7; }
+  .my-bookings { @apply mt-8 grid gap-6; }
+  .mb-heading { @apply m-0 mb-3 font-sans text-base font-semibold text-ink; }
+  .mb-list { @apply m-0 grid list-none gap-2 p-0; }
+  .mb-item { @apply flex items-center justify-between gap-4 rounded-card border border-line bg-paper p-4 no-underline text-ink; }
+  .mb-main { @apply grid gap-1; }
+  .mb-main small { @apply text-muted; }
+  .mb-item:focus-visible { @apply outline outline-2 outline-offset-2 outline-forest; }
   .booking-card-head { @apply flex items-start justify-between gap-4; }
   .booking-card .reference { @apply my-1; }
   .booking-when { @apply m-0 font-serif text-heading leading-snug; }
@@ -525,31 +530,11 @@
   .admin-main { @apply py-8; }
   .admin-status { @apply mb-4 mt-0 text-caption text-muted; }
   .admin-h { @apply mb-4 mt-0 font-sans text-subheading font-semibold tracking-normal; }
-  .board { @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5; }
-  .board-card { @apply rounded-card border border-line bg-paper p-4; border-top-width: 4px; }
-  .board-card.status-available { border-top-color: #4C9A6A; }
-  .board-card.status-reserved { border-top-color: #E0A100; }
-  .board-card.status-occupied { border-top-color: #5B8DB8; }
-  .board-card.status-clean-up { border-top-color: #8A8A8A; }
-  .board-card-head { @apply flex items-center justify-between gap-2 text-lead; }
-  .board-card select { @apply min-h-[40px]; }
   .table-scroll { @apply overflow-x-auto rounded-card border border-line bg-paper; }
   .data-table { @apply w-full border-collapse text-body; }
   .data-table th { @apply border-b border-line px-4 py-3 text-left text-caption font-semibold text-muted; }
   .data-table td { @apply border-b border-line px-4 py-3 align-top; }
   .data-table tr:last-child td { @apply border-b-0; }
-  .queue { @apply grid gap-3 md:grid-cols-2 xl:grid-cols-3; }
-  .ticket { @apply grid gap-2 rounded-card border border-line bg-paper p-4; }
-  .ticket-preparing { @apply border-clay; }
-  .ticket-served { @apply opacity-70; }
-  .ticket-head { @apply flex items-center justify-between; }
-  .ticket-table { @apply text-subheading; }
-  .ticket-items { @apply m-0 grid gap-1 p-0 text-body font-medium; list-style: none; }
-  .ticket-actions { @apply flex flex-wrap gap-2 pt-1; }
-  .stats { @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-4; }
-  .stat { @apply rounded-card border border-line bg-paper p-5; }
-  .stat-label { @apply m-0 text-small font-medium text-muted; }
-  .stat-value { @apply m-0 mt-1 font-serif text-heading-lg leading-tight; }
 
 
   /* ---------- Reveal on scroll (only when JS runs; none with reduced motion) ---------- */
@@ -595,7 +580,7 @@
 .admin-auth-form form { margin-top: 1.5rem; }
 .admin-auth-form .admin-lock { color: #2f5d50; }
 .admin-auth-form .admin-lock .icon { width: 18px; height: 18px; }
-.admin-auth-foot { margin-top: auto; color: #8a8a82; font-size: .62rem; text-align: center; }
+.admin-auth-foot { margin-top: auto; color: #657068; font-size: .62rem; text-align: center; }
 .admin-sidebar { display: flex; flex-direction: column; gap: 1rem; padding: 1.75rem 1.25rem 1.5rem; color: #fff; background: #1a3721; }
 .admin-sidebar-brand { display: grid; gap: .4rem; justify-items: start; padding: .25rem .75rem 1.5rem; border-bottom: 1px solid rgb(211 220 205 / .2); }
 .admin-sidebar-brand img { width: 138px; height: auto !important; object-fit: contain; object-position: left; filter: brightness(0) invert(1); }
@@ -657,7 +642,7 @@
 .menu-admin-summary { display: flex; align-items: center; gap: 1rem; min-height: 42px; padding: 0 1rem; border: 1px solid #e1e8da; border-radius: .55rem; background: #eef2e9; color: #536158; font-size: .72rem; white-space: nowrap; }
 .menu-admin-summary strong { color: #2f5d50; }
 .menu-summary-available { color: #286343; }
-.menu-summary-sold { color: #b35f37; }
+.menu-summary-sold { color: #a13831; }
 .menu-admin-notice { display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem; padding: .7rem .85rem; border: 1px solid #e1e8da; border-radius: .55rem; background: #eef2e9; color: #536158; font-size: .7rem; }
 .menu-admin-notice .icon { width: 15px; color: #2f5d50; }
 .menu-admin-grid { display: grid; gap: 1rem; }
@@ -687,3 +672,148 @@
 @media (max-width: 700px) { .admin-auth-card { grid-template-columns: 1fr; min-height: 0; } .admin-auth-brand { display: none; } .admin-auth-form { padding: 2rem 1.5rem; } }
 @media (max-width: 700px) { .menu-admin-toolbar { grid-template-columns: 1fr; gap: .75rem; } .menu-admin-summary { justify-content: space-between; } }
 @media (max-width: 560px) { .admin-heading-row { align-items: start; flex-direction: column; } .overview-stats { grid-template-columns: 1fr; } .admin-bar-inner { padding: .75rem 1.25rem; } .admin-live { display: none; } .menu-admin-section { padding-inline: .8rem; } .menu-admin-notice { align-items: start; } }
+
+/* ---------- Admin screens: reservations, booking detail, new reservation, tables, kitchen, guests, report ----------
+   Operational surface: dense, flat, no entrance motion. Tokens only (the admin body remaps the five core colours). */
+@layer components {
+  .admin-banner { @apply my-4 flex items-start gap-3 rounded-ctl border border-line bg-mint px-4 py-3 text-small text-idle-ink; }
+  .admin-banner svg, .admin-banner .icon { @apply mt-0.5 h-4 w-4 shrink-0 text-pine; fill: none; stroke: currentColor; stroke-width: 1.75; }
+  .admin-banner-warn { @apply bg-warn-bg text-warn-ink; }
+  .admin-banner-warn svg { @apply text-warn-ink; }
+  .admin-banner-flat { @apply mb-0 mt-4 border-transparent; }
+
+  .admin [tabindex="-1"]:focus, .admin [tabindex="-1"]:focus-visible { outline: none; } /* headings that take focus on navigation are not controls */
+  .field-inline { @apply min-w-[11rem]; }
+  .field-inline > span, .filter-grid .field > span, .menu-admin-toolbar .field > span { @apply text-caption font-bold uppercase tracking-label text-idle-ink; }
+
+  /* Summary strip (reservations) */
+  .status-strip { @apply my-4 flex flex-wrap gap-1 rounded-card border border-line bg-mist p-1.5; }
+  .strip-item { @apply inline-flex min-h-[44px] cursor-pointer items-baseline gap-2 rounded-ctl border-0 bg-transparent px-4 py-2 font-sans text-small text-idle-ink transition-colors duration-150 hover:bg-paper; }
+  .strip-item strong { @apply font-serif text-heading font-medium leading-none text-pine; }
+  .strip-item.is-on { @apply bg-paper font-semibold text-ink shadow-[0_1px_2px_rgba(32,63,50,0.08)]; }
+
+  /* Lists */
+  .list-panel { @apply p-0; }
+  .filter-grid { @apply grid grid-cols-2 gap-3 border-b border-line p-4 md:grid-cols-3 2xl:grid-cols-[1.6fr_1fr_1fr_1fr_1fr]; }
+  .filter-grid .field:first-child { @apply col-span-2 md:col-span-1; }
+  .filter-grid-3 { @apply md:grid-cols-3 2xl:grid-cols-[1.6fr_1fr_1fr]; }
+  .filter-grid .field input, .filter-grid .field select { @apply min-h-[42px]; }
+  .list-count { @apply m-0 px-4 pb-1 pt-3 text-caption text-muted; }
+  .list-panel .table-scroll { @apply rounded-none border-0 shadow-none; }
+  .list-panel .data-table { @apply w-full; }
+  .data-table .button { @apply whitespace-nowrap; }
+  .data-table td:nth-child(5), .data-table .ref { @apply whitespace-nowrap; }
+  .table-flush { @apply rounded-ctl border border-line; }
+  .data-table td, .data-table th { @apply align-middle; }
+  .empty-cell { @apply py-8 text-center text-muted; }
+  .empty-cell .text-link { @apply cursor-pointer border-0 bg-transparent p-0 font-sans text-body; }
+  .ref { @apply font-mono text-small font-semibold tracking-[0.06em] text-pine; font-variant-numeric: tabular-nums; }
+  .data-table td { font-variant-numeric: tabular-nums; }
+  .cell-clamp { @apply max-w-[22rem]; }
+  .total-row td { @apply border-t border-line bg-mist font-semibold; }
+
+  /* Detail layout */
+  .chip-row { @apply -mt-2 mb-4 flex flex-wrap items-center gap-2; }
+  .heading-actions { @apply flex flex-wrap items-center justify-end gap-2; }
+  .heading-actions .icon, .heading-actions svg { @apply h-4 w-4; fill: none; stroke: currentColor; stroke-width: 1.75; }
+  .detail-grid { @apply grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_21rem]; }
+  .stack { @apply grid gap-4; }
+  .kv { @apply m-0 grid gap-x-8 gap-y-2.5 text-small sm:grid-cols-2; }
+  .kv > div { @apply flex items-baseline justify-between gap-4; }
+  .kv dt { @apply text-muted; }
+  .kv dd { @apply m-0 text-right font-medium; }
+  .kv-1 { @apply sm:grid-cols-1; }
+  .kv-total { @apply mt-1 border-t border-line pt-2.5 text-body; }
+  .kv-total dt { @apply font-semibold text-ink; }
+  .guest-head, .guest-card { @apply flex items-center gap-4; }
+  .guest-head { @apply mb-4 border-b border-line pb-4; }
+  .guest-head > div { @apply min-w-0 flex-1 [overflow-wrap:anywhere]; }
+  .guest-head .button { @apply shrink-0; }
+  .guest-card { @apply mb-4; }
+  .avatar { @apply grid h-11 w-11 shrink-0 place-items-center rounded-full bg-sage text-small font-semibold text-pine; }
+  .avatar-lg { @apply h-14 w-14 text-subheading; }
+  .balance { @apply my-3 flex items-baseline justify-between gap-3 rounded-ctl bg-mist px-4 py-3; }
+  .balance strong { @apply font-serif text-heading-lg font-medium text-pine; }
+  .pay-record { @apply m-0 grid list-none gap-3 p-0; }
+  .pay-record li { @apply flex items-start justify-between gap-3 border-b border-line pb-3 last:border-0 last:pb-0; }
+  .pay-record li > div { @apply grid gap-1; }
+
+  /* New reservation */
+  .form-grid { @apply grid gap-3 sm:grid-cols-2; }
+  .form-actions { @apply mt-4 flex flex-wrap items-center gap-3; }
+  .form-actions-center { @apply justify-center; }
+  .pay-fixed { @apply m-0 grid gap-1 rounded-ctl border border-pine/40 bg-pay-on px-4 py-3 text-small; }
+  .pay-fixed span { @apply text-muted; }
+  .done-panel { @apply mx-auto grid max-w-[34rem] justify-items-center py-10 text-center; }
+  .done-seal { @apply mb-4 grid h-14 w-14 place-items-center rounded-full bg-mint text-pine; }
+  .done-seal svg { @apply h-7 w-7; fill: none; stroke: currentColor; stroke-width: 1.75; }
+  .done-panel h2 { @apply m-0 text-heading-lg; }
+  .done-panel .reference-code { @apply my-4 text-heading; }
+
+  /* Overview and report */
+  .overview-grid-single { grid-template-columns: 1fr !important; }
+  .overview-stats-spaced { @apply mt-0; }
+  .room-bar { @apply mb-3 flex h-2.5 gap-0.5 overflow-hidden rounded-full; }
+  .room-seg { @apply block min-w-[6px] rounded-full bg-idle-dot; }
+  .room-seg-available, .outcome-completed, .outcome-confirmed { @apply bg-ok-dot; }
+  .room-seg-reserved, .outcome-pending { @apply bg-warn-dot; }
+  .room-seg-occupied, .outcome-checked-in { @apply bg-seated-dot; }
+  .room-seg-clean-up, .outcome-no-show { @apply bg-idle-dot; }
+  .outcome-cancelled { @apply bg-danger-dot; }
+  .outcome-completed { @apply bg-pine; }
+  .hbars { @apply grid gap-3; }
+  .hbar { @apply grid grid-cols-[minmax(7rem,11rem)_1fr_auto] items-center gap-x-3 gap-y-0.5 text-small; }
+  .hbar small { @apply col-start-2 text-caption text-muted; }
+  .hbar-label { @apply font-medium; }
+  .hbar-track { @apply block h-2.5 overflow-hidden rounded-full bg-mist; }
+  .hbar-fill { @apply block h-full rounded-full bg-pine; }
+  .sales-bar { @apply bg-pine; }
+
+  /* Tables */
+  .status-legend { @apply my-4 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-card border border-line bg-paper px-4 py-3; }
+  .legend-item { @apply inline-flex items-center gap-2 text-small; }
+  .legend-item strong { @apply font-serif text-subheading font-medium; }
+  .legend-note { @apply ml-auto text-caption text-muted; }
+  .board { @apply grid gap-3 md:grid-cols-2 xl:grid-cols-3; }
+  .board-card { @apply grid content-start gap-3 rounded-card border border-line bg-paper p-5; }
+  /* Status shows on the whole outline (1px, tinted), never as a thick edge on a rounded card; the chip names it. */
+  .board-card.status-reserved { border-color: rgb(224 161 0 / 0.55); }
+  .board-card.status-occupied { border-color: rgb(91 141 184 / 0.55); }
+  .board-card-head { @apply flex items-center justify-between gap-2; }
+  .board-card-head h2 { @apply m-0 text-heading; }
+  .board-meta { @apply m-0 flex items-center gap-2 text-small text-muted; }
+  .board-meta svg { @apply h-4 w-4 text-pine; fill: none; stroke: currentColor; stroke-width: 1.75; }
+  .board-booking { @apply grid gap-0.5 border-t border-line pt-3 text-small; }
+  .board-booking span { @apply text-muted; }
+  .board-actions { @apply flex flex-wrap items-center gap-2; }
+  .board-select { @apply ml-auto; }
+  .board-select select { @apply min-h-[40px] rounded-ctl border border-line bg-paper px-2 text-small text-ink; }
+
+  /* Kitchen */
+  .kitchen-board { @apply grid items-start gap-4 md:grid-cols-3; }
+  .kitchen-col { @apply grid content-start gap-3; }
+  .kitchen-col > header { @apply flex items-center justify-between gap-3 rounded-ctl bg-mist px-4 py-3; }
+  .kitchen-col-preparing > header { @apply bg-seated-bg; }
+  .kitchen-col > header small { @apply ml-2 text-caption text-idle-ink; }
+  .kitchen-col > header strong { @apply text-small font-semibold; }
+  .kitchen-empty { @apply m-0 rounded-card border border-dashed border-line px-4 py-8 text-center text-small text-muted; }
+  .ticket { @apply grid gap-2.5 rounded-card border border-line bg-paper p-4; }
+  .ticket-served { @apply opacity-100; }
+  .ticket-served .ticket-table { @apply text-muted; }
+  .ticket-head { @apply flex items-baseline justify-between gap-2; }
+  .ticket-table { @apply m-0 text-heading; }
+  .ticket-no { @apply font-mono text-caption text-muted; }
+  .ticket-items { @apply m-0 grid list-none gap-1.5 border-t border-line p-0 pt-3 text-small font-medium; }
+  .ticket-actions { @apply flex flex-wrap gap-2 pt-1; }
+}
+@media (max-width: 700px) { .hbar { grid-template-columns: 1fr auto; } .hbar-track, .hbar small { grid-column: 1 / -1; } }
+/* Laptop widths (the 250px sidebar leaves ~730px at 1024): trim padding so the Status and action columns stay in view. */
+@media (max-width: 1279px) {
+  .admin-main { padding: 2rem 1.5rem 3rem; }
+  .admin-bar-inner { padding-inline: 1.5rem; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .data-table th, .data-table td { padding-inline: 0.5rem; }
+  .data-table .button-small { padding-inline: 0.7rem; }
+  .data-table td:nth-child(5) { white-space: normal; }
+  .list-panel .filter-grid, .list-panel .list-count { padding-inline: 1rem; }
+}

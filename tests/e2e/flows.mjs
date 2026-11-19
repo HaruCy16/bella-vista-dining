@@ -146,7 +146,16 @@ async function openFlow(page, date, time, guests) {
     await a.context().close(); await b.context().close();
 }
 
-/* 4. Staff: wrong password, kitchen role limits, check-in -> kitchen -> served -> report */
+/* 4. Staff: wrong password, role limits, check-in from the booking -> kitchen -> served -> report */
+async function adminLogin(page, user, password) {
+    await page.goto(`${BASE}/admin/login.php`);
+    await page.fill('[name=username]', user);
+    await page.fill('[name=password]', password);
+    await Promise.all([page.waitForURL(/admin\/index\.php/), page.click('button[type=submit]')]);
+    await page.waitForSelector('.overview-stat');
+}
+const goto = async (page, hash, ready) => { await page.evaluate((h) => { location.hash = h; }, hash); await page.waitForSelector(ready); };
+
 {
     let todayRef = null;
     if (TODAY_OPEN && new Date(Date.now() + 8 * 3600e3).getUTCHours() < 20) {
@@ -171,21 +180,36 @@ async function openFlow(page, date, time, guests) {
     check('Wrong password shows a generic error', (await kitchen.textContent('.form-error')).includes('Incorrect username or password'));
     await kitchen.fill('[name=password]', 'e2e-kitchen-pass');
     await Promise.all([kitchen.waitForURL(/admin\/index\.php/), kitchen.click('button[type=submit]')]);
-    await kitchen.waitForSelector('[data-board] .board-card');
-    check('Kitchen staff: no Daily report tab', !(await kitchen.$('[data-tab=report]')));
-    check('Board shows all 9 tables', (await kitchen.$$('[data-board] .board-card')).length === 9);
+    await kitchen.waitForSelector('.overview-stat');
+    const kitchenTabs = await kitchen.$$eval('[data-tab]', (t) => t.map((x) => x.dataset.tab));
+    check('Kitchen staff see no Customers, Daily reports or Menu tabs', !kitchenTabs.some((t) => ['customers', 'report', 'menu'].includes(t)), kitchenTabs.join(','));
+    await kitchen.evaluate(() => { location.hash = 'report'; });
+    await kitchen.waitForTimeout(300);
+    check('Kitchen staff opening #report land on Overview', (await kitchen.textContent('[data-panel]:not([hidden]) h1')).includes('Good '));
+    const blocked = await kitchen.evaluate(async () => (await Promise.all(['customers', 'customer&id=1', 'report&date=2026-11-18'].map((a) => fetch(`/admin/api.php?action=${a}`).then((r) => r.status)))).join(','));
+    check('Kitchen staff are refused by the customer and report endpoints (403)', blocked === '403,403,403', blocked);
+    await goto(kitchen, 'tables', '.board-card');
+    check('Tables screen shows all 9 tables', (await kitchen.$$('[data-board] .board-card')).length === 9);
     if (todayRef) {
-        const row = kitchen.locator('[data-bookings] tr', { hasText: todayRef });
-        await row.locator('text=Check in').click();
-        await kitchen.waitForFunction(() => document.querySelector('[data-board]').textContent.includes('Occupied'));
-        await kitchen.click('[data-tab=kitchen]');
-        await kitchen.waitForSelector('.ticket');
-        check('Checked-in pre-order appears in the kitchen queue for table F2', (await kitchen.textContent('.ticket')).includes('Table F2'));
-        await kitchen.click('.ticket >> text=Start preparing');
-        await kitchen.waitForSelector('.ticket >> text=Mark served');
-        await kitchen.click('.ticket >> text=Mark served');
-        await kitchen.waitForFunction(() => document.querySelector('.ticket')?.textContent.includes('Served'));
-        check('Kitchen moves the order Pending → Preparing → Served', true);
+        await goto(kitchen, 'reservations', '[data-bookings] tbody .ref');
+        await kitchen.fill('[data-res-filters] [name=q]', todayRef);
+        await kitchen.waitForFunction((ref) => document.querySelector('[data-res-count]').textContent.includes('match your filters') && document.querySelector('[data-bookings] tbody').textContent.includes(ref), todayRef);
+        check('Searching a reference narrows the list to that booking', (await kitchen.$$('[data-bookings] tbody tr')).length === 1);
+        await Promise.all([kitchen.waitForSelector('.kv'), kitchen.click('[data-bookings] tbody >> text=View booking')]);
+        check('Booking detail shows the pre-order and the bill', (await kitchen.textContent('[data-reservation-detail]')).includes('Crispy Pata') && (await kitchen.textContent('[data-reservation-detail]')).includes('Balance at the restaurant'));
+        await kitchen.click('[data-reservation-detail] >> text=Check in');
+        await kitchen.waitForFunction(() => document.querySelector('[data-reservation-detail]').textContent.includes('Guests left'));
+        check('Check in from the booking seats the party', true);
+        await goto(kitchen, 'tables', '.board-card');
+        check('The table is Occupied', (await kitchen.textContent('[data-board]')).includes('Occupied'));
+        await goto(kitchen, 'kitchen', '.kitchen-col');
+        await kitchen.waitForSelector('.kitchen-col-pending .ticket:has-text("F2")');
+        check('Checked-in pre-order appears in the kitchen queue for table F2', true);
+        await kitchen.click('.kitchen-col-pending .ticket:has-text("F2") >> text=Start preparing');
+        await kitchen.waitForSelector('.kitchen-col-preparing .ticket:has-text("F2")');
+        await kitchen.click('.kitchen-col-preparing .ticket:has-text("F2") >> text=Mark served');
+        await kitchen.waitForSelector('.kitchen-col-served .ticket:has-text("F2")');
+        check('Kitchen moves the order Pending → Preparing → Served across the columns', true);
         await kitchen.screenshot({ path: `${OUT}/7-kitchen-queue.png`, fullPage: true });
     } else {
         check('No bookable slot left today: skipped check-in flow', true);
@@ -194,16 +218,61 @@ async function openFlow(page, date, time, guests) {
     await kitchen.context().close();
 
     const manager = await newPage();
-    await manager.goto(`${BASE}/admin/login.php`);
-    await manager.fill('[name=username]', 'manager');
-    await manager.fill('[name=password]', 'e2e-manager-pass');
-    await Promise.all([manager.waitForURL(/admin\/index\.php/), manager.click('button[type=submit]')]);
-    await manager.click('[data-tab=report]');
-    await manager.waitForSelector('.stat');
+    await adminLogin(manager, 'manager', 'e2e-manager-pass');
+
+    /* A phone booking made by staff: it must appear everywhere the guest's own bookings do */
+    await goto(manager, 'reservations/new', '[data-new-res]');
+    await manager.fill('[name=first_name]', 'Lola');
+    await manager.fill('[name=last_name]', 'Mercado');
+    await manager.fill('[name=phone_number]', '0917 456 7788');
+    await manager.fill('[name=email]', 'lola@example.test');
+    await manager.fill('[name=reservation_date]', FUTURE);
+    await manager.fill('[name=number_of_guests]', '6');
+    await manager.click('[data-block="12:00:00"]');
+    await manager.waitForSelector('[data-new-tables] [data-table="F3"]');
+    const offered = await manager.$$eval('[data-new-tables] [data-table]', (c) => c.map((x) => x.dataset.table));
+    check('Staff booking offers only tables that seat 6', offered.every((t) => t.startsWith('F')) && offered.length > 0, offered.join(','));
+    await manager.click('[data-new-tables] [data-table="F3"]');
+    check('Booking summary shows the Family fee', (await manager.textContent('[data-new-summary]')).includes('₱500'));
+    await manager.click('[data-new-submit]');
+    check('Staff must confirm the policies first', (await manager.textContent('[data-new-error]')).includes('policies'));
+    await manager.check('[name=terms_accepted]');
+    await manager.click('[data-new-submit]');
+    await manager.waitForSelector('.done-panel');
+    const staffRef = (await manager.textContent('.done-panel .reference-code')).trim();
+    check('Staff booking returns an 8-character reference', /^[A-Z2-9]{8}$/.test(staffRef), staffRef);
+    await manager.click('.done-panel >> text=View booking');
+    await manager.waitForSelector('.kv');
+    check('Staff booking is Confirmed and pays at the restaurant', (await manager.textContent('[data-reservation-detail]')).includes('Confirmed') && (await manager.textContent('[data-reservation-detail]')).includes('Pay at the restaurant'));
+    await goto(manager, 'reservations', '[data-bookings] tbody');
+    await manager.fill('[data-res-filters] [name=date]', FUTURE);
+    await manager.selectOption('[data-res-filters] [name=type]', 'Family');
+    await manager.waitForFunction((ref) => document.querySelector('[data-bookings] tbody').textContent.includes(ref), staffRef);
+    await manager.click('.strip-item >> text=Confirmed');
+    await manager.waitForFunction(() => document.querySelector('.strip-item.is-on')?.textContent.includes('Confirmed'));
+    check('Date, category and status filters find the booking', (await manager.textContent('[data-bookings] tbody')).includes(staffRef));
+    await goto(manager, 'customers', '[data-customers] tbody tr');
+    check('The new guest appears in Customers', (await manager.textContent('[data-customers]')).includes('Lola Mercado'));
+    await manager.click('[data-customers] tbody tr:has-text("Lola Mercado") >> text=Guest record');
+    await manager.waitForSelector('.guest-card');
+    check('Guest record shows their upcoming booking', (await manager.textContent('[data-customer-detail]')).includes(staffRef));
+    await manager.click('[data-customer-detail] >> text=Create reservation');
+    await manager.waitForSelector('[data-new-res]');
+    check('Create reservation from a guest record pre-fills the form', (await manager.inputValue('[name=email]')) === 'lola@example.test');
+    // A second staff booking for the same table and block is refused, and the screen says why
+    await manager.fill('[name=first_name]', 'Nora'); await manager.fill('[name=last_name]', 'Dela Cruz'); await manager.fill('[name=phone_number]', '0917 100 2000'); await manager.fill('[name=email]', 'nora@example.test');
+    await manager.fill('[name=reservation_date]', FUTURE);
+    await manager.fill('[name=number_of_guests]', '6');
+    await manager.click('[data-block="12:00:00"]');
+    await manager.waitForSelector('[data-new-tables] [data-table]');
+    check('The table staff just booked is no longer offered', !(await manager.$('[data-new-tables] [data-table="F3"]')));
+
+    await goto(manager, 'report', '.hbar');
     const report = await manager.textContent('[data-report]');
-    check('Manager sees the daily report', report.includes('Reservations') && report.includes('Food sales'));
+    check('Manager sees the daily report', report.includes('Reservations') && report.includes('Food sales') && report.includes('Table category usage'));
     if (todayRef) check("Today's report counts the served Crispy Pata", report.includes('₱650') && report.includes('Crispy Pata'), report.replace(/\s+/g, ' ').slice(0, 160));
     await manager.screenshot({ path: `${OUT}/8-manager-report.png`, fullPage: true });
+    check('No JavaScript errors (manager)', manager.errors.length === 0, manager.errors.join('; '));
     await manager.click('text=Sign out');
     await manager.waitForURL(/admin\/login\.php/);
     check('Sign out returns to the login page', true);

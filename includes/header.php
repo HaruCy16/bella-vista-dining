@@ -7,6 +7,7 @@ $flowPage = $flowPage ?? false; // booking flow: its own app bar on mobile, no t
 $nav = [
     'about' => ['Our story', '/public/about.php'],
     'menu' => ['Menu & preorder', '/public/menu.php'],
+    'booking' => ['Check my Bookings', '/public/booking.php'],
     'reserve' => ['Reserve a table', '/public/reserve.php'],
 ];
 ?>
@@ -28,7 +29,7 @@ $nav = [
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261118c">
+    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261119c">
 </head>
 <body class="<?= $flowPage ? 'is-flow' : 'has-tabbar' ?>">
     <a class="skip-link" href="#main">Skip to content</a>

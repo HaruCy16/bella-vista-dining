@@ -105,7 +105,7 @@
         const minimum = b.minimum_order > 0 && b.order_total === 0 && live
             ? el('p', { class: 'hint' }, `Standard tables have a ${peso(b.minimum_order)} minimum food order, settled when you're seated.`) : null;
 
-        card.replaceChildren(
+        card.replaceChildren(...[
             el('div', { class: 'booking-card-head' },
                 el('div', {}, el('p', { class: 'small m-0 text-muted' }, 'Reference'), el('p', { class: 'reference m-0' }, b.reference_code)),
                 el('span', { class: `chip ${tone}` }, label)),
@@ -113,9 +113,11 @@
             el('p', { class: 'm-0 text-muted' }, `${b.name} · ${b.number_of_guests} ${b.number_of_guests === 1 ? 'guest' : 'guests'} · ${b.table_type} table ${b.table_id}`),
             b.items.length ? el('ul', { class: 'booking-items' }, b.items.map((i) => el('li', {}, el('span', {}, `${i.quantity}× ${i.name}`), el('span', {}, peso(i.subtotal))))) : null,
             money, minimum, error, actions.childElementCount ? actions : null, cancelBox,
-        );
+        ].filter(Boolean));
         card.hidden = false;
         lookupForm.hidden = true;
+        const back = $('[data-back]');
+        if (back) back.hidden = false;
     }
 
     function row(term, value) {
@@ -132,7 +134,7 @@
         button.disabled = true;
         try {
             const booking = await api('/public/api/reservations.php', { action: 'lookup', reference_code: form.elements.reference_code.value.trim(), email });
-            history.replaceState(null, '', `?ref=${encodeURIComponent(booking.reference_code)}`);
+            history.replaceState(null, '', '/public/booking.php');
             render(booking);
         } catch (e) {
             $('span', error).textContent = e.message;

@@ -11,13 +11,6 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 $reference = strtoupper(trim((string) ($_GET['ref'] ?? '')));
 $paymentResult = in_array($_GET['payment'] ?? '', ['success', 'failed', 'cancelled'], true) ? $_GET['payment'] : null;
 $booking = null;
-if ($reference !== '' && ($email = GuestSession::emailFor($reference)) !== null) {
-    try {
-        $booking = ReservationService::make(db())->lookup($reference, $email);
-    } catch (NotFoundException) {
-        $booking = null;
-    }
-}
 
 $pageTitle = 'Your booking · Bella Vista Dining';
 $activePage = 'booking';
@@ -45,9 +38,10 @@ require __DIR__ . '/../includes/header.php';
         <p class="form-error col-span-full" role="alert" hidden><?= icon('alert') ?><span></span></p>
     </form>
 
+    <p class="m-0 mt-6" data-back <?= $booking ? '' : 'hidden' ?>><a class="text-link" href="/public/booking.php">← All my bookings</a></p>
     <section class="booking-card" data-booking hidden aria-live="polite">
     </section>
 </main>
 <script>window.BV_DEPOSIT_PERCENT = <?= PaymentService::DEPOSIT_PERCENT ?>; window.BV_BOOKING = <?= json_encode($booking, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script>
-<script src="/public/assets/js/booking.js?v=20261114d" defer></script>
+<script src="/public/assets/js/booking.js?v=20261119b" defer></script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>

@@ -157,6 +157,158 @@ final class OperationsService
             'top_items' => array_map(static fn (array $row): array => [
                 'name' => $row['item_name'], 'quantity' => (int) $row['quantity'], 'sales' => Money::fromPesos((string) $row['sales']),
             ], $report['top_items']),
+            'sales_by_block' => array_map(static fn (array $row): array => [
+                'block_hour' => $row['block_hour'], 'label' => Config::slotLabel(sprintf('%02d:00', $row['block_hour'])),
+                'orders' => $row['orders'], 'sales' => Money::fromPesos($row['sales']),
+            ], $report['sales_by_block']),
+            'sales_by_category' => array_map(static fn (array $row): array => [
+                'name' => $row['category_name'], 'quantity' => (int) $row['quantity'], 'sales' => Money::fromPesos((string) $row['sales']),
+            ], $report['sales_by_category']),
+            'status_counts' => $report['status_counts'],
+            'table_types' => array_map(static fn (array $row): array => [
+                'type' => $row['type_name'], 'bookings' => (int) $row['bookings'], 'guests' => (int) $row['guests'],
+                'fees' => Money::fromPesos((string) $row['fees']), 'food_sales' => Money::fromPesos((string) $row['food_sales']),
+            ], $report['table_types']),
+            'extra_guest_fees' => Money::fromPesos((string) $report['fee_breakdown']['extra_guest']),
+            'forfeited_fees' => Money::fromPesos((string) $report['fee_breakdown']['forfeited']),
+        ];
+    }
+
+    /**
+     * Bookings for a service date with the day's status counts (counts ignore the other filters).
+     *
+     * @param array{date: string, status?: ?string, block?: ?string, type?: ?string, payment?: ?string, q?: ?string} $filters
+     * @return array{date: string, counts: array<string, int>, total: int, rows: list<array<string, mixed>>}
+     */
+    public function reservationList(array $filters): array
+    {
+        $counts = $this->admin->statusCounts($filters['date']);
+        $rows = array_map(static fn (array $r): array => [
+            'reservation_id' => (int) $r['reservation_id'],
+            'reference_code' => $r['reference_code'],
+            'name' => $r['first_name'] . ' ' . $r['last_name'],
+            'phone' => $r['phone_number'],
+            'email' => $r['email'],
+            'table_id' => $r['table_id'],
+            'table_type' => $r['type_name'],
+            'start_time' => substr($r['start_time'], 0, 5),
+            'display_time' => Config::slotLabel($r['start_time']),
+            'guests' => (int) $r['number_of_guests'],
+            'status' => $r['status'],
+            'payment_status' => $r['payment_status'],
+            'fee' => Money::fromPesos((string) $r['total_fee']),
+            'food_total' => Money::fromPesos((string) $r['food_total']),
+        ], $this->admin->searchReservations($filters));
+        return ['date' => $filters['date'], 'counts' => $counts, 'total' => array_sum($counts), 'rows' => $rows];
+    }
+
+    /**
+     * Everything staff need about one booking, in centavos. Reuses the guest-facing presenter so the
+     * amounts, refund rule and balance can never differ between the two screens.
+     *
+     * @return array<string, mixed>
+     */
+    public function reservationDetail(int $reservationId, DateTimeImmutable $now): array
+    {
+        $reservation = $this->reservations->findById($reservationId) ?? throw new NotFoundException('Booking not found.');
+        $detail = ReservationService::make($this->pdo)->present($reservation);
+        $payments = (new PaymentRepository($this->pdo))->forReservation($reservationId);
+        $orders = [];
+        foreach ($this->orders->forReservation($reservationId) as $row) {
+            $orders[$row['order_id']] = $row['order_status'];
+        }
+        $items = [];
+        foreach ($this->orders->forReservation($reservationId) as $row) {
+            if ($row['item_id'] !== null && $row['order_status'] !== 'Cancelled') {
+                $unit = Money::fromPesos((string) $row['unit_price']);
+                $items[] = ['name' => $row['item_name'], 'quantity' => (int) $row['quantity'], 'unit_price' => $unit, 'subtotal' => $unit * (int) $row['quantity']];
+            }
+        }
+        $start = BookingRules::startOf($reservation['reservation_date'], $reservation['start_time']);
+        return [
+            'reservation_id' => $reservationId,
+            'email' => $reservation['email'],
+            'phone' => $reservation['phone_number'],
+            'customer_id' => (int) $reservation['customer_id'],
+            'created_at' => $reservation['created_at'],
+            'extra_fee' => Money::fromPesos((string) $reservation['extra_fee']),
+            'base_fee' => Money::fromPesos((string) $reservation['total_fee']) - Money::fromPesos((string) $reservation['extra_fee']),
+            'grace_ends' => BookingRules::graceEndsAt($start)->format('g:i A'),
+            'is_today' => $reservation['reservation_date'] === $now->format('Y-m-d'),
+            'can_check_in' => in_array($reservation['status'], ['Pending', 'Confirmed'], true) && $reservation['reservation_date'] === $now->format('Y-m-d'),
+            'can_finish' => $reservation['status'] === 'Checked-in',
+            'order_statuses' => array_values(array_unique(array_values($orders))),
+            'payments' => array_map(static fn (array $p): array => [
+                'type' => $p['payment_type'], 'amount' => Money::fromPesos((string) $p['amount']), 'method' => $p['method'],
+                'state' => $p['payment_state'], 'at' => $p['created_at'],
+            ], $payments),
+        ] + ['items' => $items] + $detail;
+    }
+
+    /**
+     * The guest directory with headline numbers. Spend counts settled (served) food only.
+     *
+     * @return array{summary: array<string, int>, rows: list<array<string, mixed>>}
+     */
+    public function customerDirectory(DateTimeImmutable $now): array
+    {
+        $rows = array_map(static fn (array $c): array => [
+            'customer_id' => (int) $c['customer_id'],
+            'name' => $c['name'], 'email' => $c['email'], 'phone' => $c['phone'],
+            'reservations' => (int) $c['reservations'], 'completed' => (int) $c['completed'], 'upcoming' => (int) $c['upcoming'],
+            'last_visit' => $c['last_visit'], 'food_spend' => Money::fromPesos((string) $c['food_spend']),
+        ], $this->admin->customerDirectory($now->format('Y-m-d')));
+        return [
+            'summary' => [
+                'total' => count($rows),
+                'returning' => count(array_filter($rows, static fn (array $c): bool => $c['reservations'] >= 2)),
+                'upcoming' => array_sum(array_column($rows, 'upcoming')),
+                'food_spend' => array_sum(array_column($rows, 'food_spend')),
+            ],
+            'rows' => $rows,
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    public function customerRecord(int $customerId): array
+    {
+        $record = $this->admin->customerRecord($customerId) ?? throw new NotFoundException('Customer not found.');
+        $history = [];
+        $outcomes = [];
+        $types = [];
+        $visits = [];
+        $spend = 0;
+        foreach ($record['reservations'] as $r) {
+            $served = Money::fromPesos((string) $r['served_total']);
+            $outcomes[$r['status']] = ($outcomes[$r['status']] ?? 0) + 1;
+            if ($r['status'] !== 'Cancelled' && $r['status'] !== 'No-show') {
+                $types[$r['type_name']] = ($types[$r['type_name']] ?? 0) + 1;
+            }
+            if ($r['status'] === 'Completed') {
+                $spend += $served;
+                $visits[] = ['date' => $r['reservation_date'], 'reference_code' => $r['reference_code'], 'amount' => $served];
+            }
+            $history[] = [
+                'reservation_id' => (int) $r['reservation_id'], 'reference_code' => $r['reference_code'], 'date' => $r['reservation_date'],
+                'time' => Config::slotLabel($r['start_time']), 'table_id' => $r['table_id'], 'table_type' => $r['type_name'],
+                'guests' => (int) $r['number_of_guests'], 'status' => $r['status'], 'payment_status' => $r['payment_status'],
+                'food_total' => Money::fromPesos((string) $r['food_total']), 'items' => $r['items'] ?? '',
+            ];
+        }
+        arsort($types);
+        $completed = count($visits);
+        return [
+            'customer_id' => (int) $record['profile']['customer_id'],
+            'name' => $record['profile']['name'], 'email' => $record['profile']['email'], 'phone' => $record['profile']['phone'],
+            'member_since' => $record['profile']['member_since'],
+            'preferred_seating' => array_key_first($types),
+            'stats' => [
+                'reservations' => count($history), 'completed' => $completed, 'food_spend' => $spend,
+                'average_spend' => $completed ? intdiv($spend, $completed) : 0,
+            ],
+            'spend_by_visit' => array_slice(array_reverse($visits), -6),
+            'outcomes' => $outcomes,
+            'history' => $history,
         ];
     }
 

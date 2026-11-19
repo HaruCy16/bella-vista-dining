@@ -7,13 +7,19 @@ declare(strict_types=1);
  */
 final class GuestSession
 {
-    private const LIMIT = 10;
+    private const LIMIT = 25;
 
     public static function remember(string $reference, string $email): void
     {
         $bookings = $_SESSION['guest_bookings'] ?? [];
         $bookings[strtoupper($reference)] = strtolower(trim($email));
         $_SESSION['guest_bookings'] = array_slice($bookings, -self::LIMIT, null, true);
+    }
+
+    /** @return array<string, string> reference => email, newest last */
+    public static function all(): array
+    {
+        return $_SESSION['guest_bookings'] ?? [];
     }
 
     public static function emailFor(string $reference): ?string

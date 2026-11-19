@@ -47,6 +47,12 @@ docker compose down -v          # stop AND delete the database (next start re-se
 docker compose logs -f app      # PHP / Apache errors
 ```
 
+Remove one test reservation and its related payments, orders, and customer record:
+
+```bash
+docker compose exec app php scripts/cleanup-test-booking.php 4AAZLJWV
+```
+
 ### Configuration (.env)
 
 Every setting has a working default in `docker-compose.yml`. To change one,
@@ -155,6 +161,9 @@ Example: VIP for 18 guests = ₱2,500 + 3 × ₱300 = **₱3,400**.
 | Timezone | `Asia/Manila` everywhere: PHP (`date.timezone`, `date_default_timezone_set`), containers (`TZ`), MySQL session (`SET time_zone = '+08:00'` on connect; Manila has no DST) |
 | Web root | The project root is served (shared hosting cannot change it). `.htaccess` returns 403 for dotfiles, `database/`, `includes/`, `src/`, `tests/`, `scripts/`, `docker/`, `sketch/`, `vendor/`, `node_modules/` and tooling files |
 | Location & map | **Sample data** (spec gives no address): Santo Tomas, Batangas, set in `Config::ADDRESS_LINES` / `LATITUDE` / `LONGITUDE`. Google Maps Embed API when `GOOGLE_MAPS_EMBED_API_KEY` is set, keyless Google embed otherwise; "Get directions" uses Google Maps URLs (no key) |
+| Admin screens | Figma staff frames, built on current functions only. Kitchen Staff: Overview, Reservations, Tables, Kitchen. Manager: also Customers, Daily reports, Menu availability. Customers are Manager only (guest personal data) |
+| Staff "New reservation" | Uses the guest booking rules unchanged (slot not started, table fits, Standard minimum), so it covers phone and advance bookings, paid at the restaurant. A guest at the door for a block already under way is rejected; walk-ins, staff order entry, recording cash/card, staff cancellation and a refunds-due list are not built yet |
+| Guests in admin | Each booking stores its own `customers` row, so the directory groups guests by email. Spend counts settled (served) orders only |
 | Compiled CSS | `public/assets/css/app.css` is committed so hosts without Node work |
 | Booking flow | Full page, not a modal: `/public/reserve.php` (visit → seating → menu → pre-order → checkout), then `/public/confirmation.php`. Each step has its own `#hash` so Back works. Landing CTAs link to it, with `?date=&time=&guests=` prefilled by the landing picker. Follows the Figma mobile + desktop frames |
 | Checkout total | The flow shows *pre-order + reservation fee* as the amount due, matching "Online payment" above. The Figma checkout instead shows the fee credited against the pre-order (₱3,540 − ₱500). **Open question for the client**; changing it means changing `PaymentService::amountDue()` and `ReservationService::present()` |
@@ -175,9 +184,10 @@ Tests run against `bella_vista_test`, which is rebuilt from `schema.sql` +
 `seed.sql` on every run. They never touch `bella_vista`.
 
 - `tests/Unit`: fee calculator, booking/cancellation rules, validator, Config, Money
-- `tests/Integration`: booking, cancellation, payments, kitchen/admin, login throttling (MySQL)
+- `tests/Integration`: booking, cancellation, payments, kitchen/admin, login throttling, and the admin read models (per-block sales, categories, reservation search, booking detail, guest directory and record) (MySQL)
 - `tests/Http`: real HTTP requests (CSRF, 409 race, roles, injection/XSS, malformed input) against a built-in server on the test DB
 - `tests/e2e`: browser flows, see [tests/e2e/README.md](tests/e2e/README.md)
+- `tests/fixtures/demo-day.php`: fills the **test** database with a realistic service day (every status, all six blocks, orders at each kitchen stage, a returning guest) so the admin screens can be seen with data: `docker compose exec -T -e DB_NAME=bella_vista_test app php tests/fixtures/demo-day.php`. It refuses to run on any database not ending in `_test`, and PHPUnit wipes it.
 
 ### Tailwind CSS
 
@@ -196,7 +206,8 @@ Commit the rebuilt `public/assets/css/app.css`.
 ```
 index.php                 landing page
 public/                   pages (menu, about, visit, contact), api/ JSON endpoints, assets/
-admin/                    login, dashboard, api.php (admin JSON actions)
+admin/                    login, dashboard shell, api.php (admin JSON actions)
+public/assets/js/admin*.js  admin front end: core + routing, reservations, customers, report
 includes/                 bootstrap.php, db.php (PDO), session.php
 src/Support/              Config, Money, Csrf, Auth
 src/Repositories/         PDO queries
@@ -232,7 +243,7 @@ in environment variables.
 | 3. Booking engine + PHPUnit rules | Nov 11–13 | **Done** |
 | 4. Booking flow, pre-order cart, checkout, confirmation | Nov 13–15 | **Done** |
 | 5. Payments (Mock done; PayMongo test mode, webhook) | Nov 15–16 | Mock done; PayMongo needs test keys |
-| 6. Admin: roles, table board, kitchen queue, daily report | Nov 16–19 | **Done** |
+| 6. Admin: roles, table board, kitchen queue, daily report | Nov 16–19 | **Done**, redesigned from Figma Nov 19: Overview, Reservations (filters, booking detail, staff phone booking), Tables, Kitchen columns, Customers + guest record, Daily report, Menu availability |
 | 7. QA (PHPUnit + Playwright flows, real phone) | Nov 20–23 | Automated suites pass; real-device test pending |
 | 8. Ship | Nov 24–27 | Demo Nov 28 |
 

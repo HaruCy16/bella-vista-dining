@@ -29,6 +29,12 @@ final class Config
         return ['10:00:00', '12:00:00', '14:00:00', '16:00:00', '18:00:00', '20:00:00'];
     }
 
+    /** Start hours of the dining blocks: 10, 12, 14, 16, 18, 20. @return list<int> */
+    public static function blockHours(): array
+    {
+        return array_map(static fn (string $slot): int => (int) substr($slot, 0, 2), self::reservationSlots());
+    }
+
     public static function isReservationSlot(string $startTime): bool
     {
         return in_array($startTime, self::reservationSlots(), true);

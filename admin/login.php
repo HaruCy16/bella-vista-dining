@@ -16,15 +16,15 @@ if (Request::method() === 'POST') {
         $admin = (new AdminAuthService(db()))->attempt($username, (string) ($_POST['password'] ?? ''), Request::ip());
         Auth::signIn($admin);
         Response::redirect('/admin/index.php');
-    } catch (AppException $exception) {
+    } catch (AppException $exception) { 
         http_response_code($exception->status());
         $error = $exception->getMessage();
     } catch (Throwable $exception) {
         error_log('[admin login] ' . $exception->getMessage());
-        http_response_code(500);
+        http_response_code(500);  
         $error = 'Sign-in is unavailable right now. Please try again.';
     }
-}
+} 
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,7 +34,7 @@ if (Request::method() === 'POST') {
     <meta name="robots" content="noindex">
     <title>Staff sign-in · Bella Vista Dining</title>
     <?= brand_head_tags() ?>
-    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261118b">
+    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261119h">
 </head>
 <body class="admin-auth">
 <main class="admin-auth-card">
