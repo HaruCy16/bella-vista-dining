@@ -5,7 +5,7 @@
 1. Landing picker → booking flow: Family table with pre-order, a 50% deposit and the balance through the sandbox checkout.
 2. Standard table on a phone: blocks a pre-order under ₱1,000, books on-site, then cancels.
 3. Two guests race for one VIP room; the second sees the 409 message back on the seating step.
-4. Staff: wrong password, Kitchen Staff can't open reports, check-in → kitchen → served, manager's report.
+4. Staff: role limits (Kitchen Staff see no customers or reports), search and open a booking, check in from the booking, kitchen columns, a staff phone booking that appears in lists, customers and reports, and a refused double-booking.
 
 ```bash
 # 1. Test admins + a server on the test DB (port 8097)

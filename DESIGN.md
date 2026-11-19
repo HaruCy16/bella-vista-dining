@@ -272,7 +272,8 @@ The type pairing does most of the branding. Newsreader gives headings their warm
 
 **Surfaces and their status.**
 - **Shipped and governed by this file:** landing page, booking flow (visit, seating, menu, pre-order review, checkout), confirmation, menu page, mobile tab bar and app bar, header, footer.
-- **Pending redesign, do not copy:** the admin screens (login, tables board, kitchen queue, daily report). Their staff colour tokens exist but the layout has not had the design pass. The About, Visit and Contact pages, the booking-lookup page ("Your booking") and the sandbox checkout still use older styles (`.inner-hero`, `.eyebrow`, `.content-panel`, `.visit-page-content`); treat them as legacy, not as patterns to extend.
+- **Shipped as a second surface (Operate mode):** the admin: login, Overview, Reservations (list, booking detail, new reservation), Tables, Kitchen orders, Customers (directory, guest record), Daily report and Menu availability. See Components, Admin.
+- **Pending redesign, do not copy:** the About, Visit and Contact pages, the booking-lookup page ("Your booking") and the sandbox checkout still use older styles (`.inner-hero`, `.eyebrow`, `.content-panel`, `.visit-page-content`); treat them as legacy, not as patterns to extend.
 
 ## Colors
 
@@ -418,6 +419,22 @@ The single forward button of the flow. On phones it is fixed to the bottom over 
 ### Confirmation (signature)
 A mint seal with a check, a small label, a serif headline with the guest's first name, then a two-column layout of cards: the reservation (pine reference code in monospace, serif date, status badge) and the payment breakdown, with a Sand Panel arrival reminder. It is the only place the Butter badge appears.
 
+### Admin (staff screens)
+An Operate surface: the visitor is doing a task, so it is dense, flat and plain. The same palette and type, with the staff values of the five core colours (`body.admin` and `body.admin-auth`), and no entrance animation. Only press and colour feedback (150ms) moves.
+- **Shell:** a 250px Estate Forest sidebar (white logo, section label, one tab per screen; the current tab is a Linen Card pill) beside a content column of at most 1320px with a thin top bar (breadcrumb, live time, role badge). Below 900px the sidebar becomes a top strip. Kitchen Staff see Overview, Reservations, Tables and Kitchen only; Customers, Daily reports and Menu availability are Manager screens.
+- **Screens are hash routes** (`#reservations`, `#reservation/12`, `#customer/3`), so Back works. A screen's filters, typed text and forms are never re-rendered by the 15-second refresh, which only replaces live data.
+- **Panels:** Linen Card, hairline border, about 13px corners, serif panel title with a small muted subtitle. Tables sit inside a panel without a second border (no nested cards).
+- **Heading row:** a serif page title, one line of muted explanation, and the screen's main action on the right (a forest button; a terracotta button is never used here).
+- **Summary strip and filters (lists):** a row of counts that double as status filters (the chosen one is a Linen Card pill), then a filter row of labelled controls in small uppercase labels, a count line ("5 of 13 bookings for Thu, Nov 19"), and the table with one "View booking" or "Guest record" button per row.
+- **Stat tiles:** four tiles in one bordered strip (icon, label, serif number, one line of context). Used on Overview, Customers, a guest record and the report.
+- **Status vocabulary:** the status trios under Colors (green available/confirmed, amber reserved/pending, blue seated/occupied, red cancelled, grey no-show/completed/clean-up). A table card carries its status in a 3px top border and a chip.
+- **Tables board:** cards of a table or room with its capacity, who is booked in the chosen block, and the next sensible action (Check in, Guests left, Mark available, View booking). A seated party stays on its table whatever the block.
+- **Kitchen board:** three columns (Pending, Preparing, Served) with a count each; a ticket shows the table, order number, arrival, items and the next action. Empty columns say what will appear there.
+- **Booking detail and guest record:** a heading row with actions, a chip row (status, payment, table, order), then two columns from 1280px (main facts and food on the left, bill summary and payment record on the right) and one column below. Money is right-aligned; the balance is the one large serif figure.
+- **Charts:** plain CSS bars in Pine Leaf, labelled with their value, with a visible zero. Never decorative and never estimated.
+
+**The Real Numbers Rule.** Every figure on an admin screen is read from the database for the stated date. If there is no data, show an empty state that says what will appear and when; never scale, split or invent a number to fill a chart.
+
 ### Motion
 One easing for entrances and slides: `cubic-bezier(0.23, 1, 0.32, 1)`. Feedback (press, colour, border) takes 150 to 200ms; sliding indicators 320ms; entrances 460 to 520ms. Only `transform` and `opacity` move. Staggers are capped at eight steps so a long list never makes anyone wait. All entrance animations replay on every page view, including pages restored from the browser's back/forward cache. With `prefers-reduced-motion: reduce` everything appears at once and transitions drop to near zero.
 
@@ -433,7 +450,7 @@ One easing for entrances and slides: `cubic-bezier(0.23, 1, 0.32, 1)`. Feedback 
 - **Do** dim disabled text by colour, not opacity, so it stays readable; reserve opacity dimming for non-text (unavailable calendar days).
 - **Do** animate only `transform` and `opacity`, with the shared ease-out, and stagger no more than eight items.
 - **Do** darken any Figma colour that fails 4.5:1 for small text, and record the change under Colors.
-- **Do** check a layout change by looking at it at phone, tablet and desktop widths; an accessibility scan does not catch overlap.
+- **Do** check a layout change by looking at it at phone, tablet and desktop widths; an accessibility scan does not catch overlap. For the admin, check 1024px as well: the sidebar leaves about 730px.
 
 ### Don't:
 - **Don't** add drop shadows to buttons, chips or rows; state is colour.
@@ -444,10 +461,11 @@ One easing for entrances and slides: `cubic-bezier(0.23, 1, 0.32, 1)`. Feedback 
 - **Don't** animate width, height, margin or top/left (the one exception is the tab indicator's width, which is a single element).
 - **Don't** apply hover styles that need a mouse without the hover media guard; the Tailwind setting already does this for `hover:` utilities.
 - **Don't** let an animation hide content from users with reduced-motion turned on.
+- **Don't** animate anything in the admin beyond press and colour feedback, or fill a chart with estimated numbers.
 
 ### Known drift (recorded, not part of the system)
 - Legacy token `deep` (#7A3E2A) and the `.eyebrow` label style are still referenced by older pages.
 - One-off values outside the config: the terracotta hover (#9E5230), the quantity button border (#DCDDCF), `accent-[#2F5D50]` on checkboxes and radios, the `2.5rem` phone hero headline, and the legacy `rgba(35,37,28,…)` step-trail separator and `rgba(74,94,40,…)` open-status halo.
 - Unused rules left in the stylesheet: `.footer-grid`, `.footer-bottom`, `.map-placeholder`, `.open-status`.
 - The booking-lookup page and the sandbox checkout use terracotta and the older card styling.
-- The admin UI has not been redesigned; it uses the staff palette variables over the previous layout.
+- The admin's first-pass styles (sidebar shell, menu availability, login) are plain CSS with literal hex values that equal the staff tokens, and 0.8rem panel corners instead of the 16px card radius. Newer admin rules use tokens; migrate the older ones when touched.

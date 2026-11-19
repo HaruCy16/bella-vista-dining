@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-13T21:11:04Z",
+  "generatedAt": "2026-11-19T09:30:35Z",
   "title": "Design System: Bella Vista Dining",
   "extensions": {
     "colorMeta": {
@@ -505,6 +505,11 @@
         "name": "The Flat-By-Default Rule",
         "body": "Surfaces have no shadow at rest beyond the ambient card line. Do not add drop shadows to buttons, chips or rows. State is shown by colour (pine fill, border tint), not elevation.",
         "section": "elevation"
+      },
+      {
+        "name": "The Real Numbers Rule",
+        "body": "Every figure on an admin screen is read from the database for the stated date. If there is no data, show an empty state that says what will appear and when; never scale, split or invent a number to fill a chart.",
+        "section": "components"
       }
     ],
     "dos": [
@@ -517,7 +522,7 @@
       "**Do** dim disabled text by colour, not opacity, so it stays readable; reserve opacity dimming for non-text (unavailable calendar days).",
       "**Do** animate only `transform` and `opacity`, with the shared ease-out, and stagger no more than eight items.",
       "**Do** darken any Figma colour that fails 4.5:1 for small text, and record the change under Colors.",
-      "**Do** check a layout change by looking at it at phone, tablet and desktop widths; an accessibility scan does not catch overlap."
+      "**Do** check a layout change by looking at it at phone, tablet and desktop widths; an accessibility scan does not catch overlap. For the admin, check 1024px as well: the sidebar leaves about 730px."
     ],
     "donts": [
       "**Don't** add drop shadows to buttons, chips or rows; state is colour.",
@@ -527,7 +532,8 @@
       "**Don't** hotlink photos or load anything from another site's image host; use local files and the `venue_image()` helper.",
       "**Don't** animate width, height, margin or top/left (the one exception is the tab indicator's width, which is a single element).",
       "**Don't** apply hover styles that need a mouse without the hover media guard; the Tailwind setting already does this for `hover:` utilities.",
-      "**Don't** let an animation hide content from users with reduced-motion turned on."
+      "**Don't** let an animation hide content from users with reduced-motion turned on.",
+      "**Don't** animate anything in the admin beyond press and colour feedback, or fill a chart with estimated numbers."
     ]
   }
 }
