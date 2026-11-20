@@ -247,9 +247,13 @@
   .cta-band p { @apply m-0 mt-2 text-cream; }
 
   /* ---------- Footer ---------- */
-  .footer { @apply mt-0 border-t border-line py-8 text-small text-muted; }
-  .footer-row { @apply flex flex-col items-center justify-between gap-4 text-center lg:flex-row lg:text-left; }
-  .footer-middle nav { @apply mt-1 flex justify-center gap-4; }
+  .footer { @apply mt-0 border-t border-line py-5 text-caption text-muted lg:py-8 lg:text-small; }
+  .footer-row { @apply grid items-center justify-items-center gap-2 text-center lg:grid-cols-3 lg:gap-8; }
+  .footer-row > .brand { @apply lg:justify-self-start; }
+  .footer-row > .brand img { @apply !h-8 lg:!h-12; }
+  .footer-row > p { @apply lg:justify-self-end; }
+  .footer-middle { @apply grid justify-items-center gap-1 lg:gap-2; }
+  .footer-middle nav { @apply flex flex-wrap justify-center gap-x-4; }
   .footer-middle nav a { @apply inline py-0; }
   .footer-middle p, .footer-row > p { @apply m-0; }
   .cta-band + .footer, main:has(> .cta-band:last-child) + .footer { @apply border-t-0; }
