@@ -1,7 +1,8 @@
 /*
  * Booking flow (public/reserve.php): visit -> seating -> menu -> review -> checkout.
  * Each step has its own #hash so the browser back button and the back gesture work.
- * Progress is kept in sessionStorage (no personal details) so a reload doesn't lose it.
+ * Progress is kept in sessionStorage (no personal details) so leaving and coming back in the
+ * same tab keeps it; an explicit reload clears it and starts a fresh booking (no accounts here).
  * Every number shown here is a display mirror; the server re-validates and re-prices.
  */
 (() => {
@@ -23,6 +24,14 @@
     const STORE = 'bv-reserve';
     const MAX_QTY = 50;
     const MAX_LINES = 30;
+
+    // A reload starts over: drop saved progress, then reopen the bare page so the URL's
+    // step and prefill (and any form values the browser would restore) are gone too.
+    if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+        try { sessionStorage.removeItem(STORE); } catch { /* storage blocked */ }
+        location.replace(location.pathname);
+        return;
+    }
 
     /* ---------- Dates (all YYYY-MM-DD strings in Manila time, handled as UTC dates) ---------- */
     const toDate = (iso) => new Date(iso + 'T00:00:00Z');

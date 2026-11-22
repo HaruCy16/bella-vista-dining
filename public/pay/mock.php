@@ -25,7 +25,7 @@ $reservation = $payment ? (new ReservationRepository(db()))->findById((int) $pay
     <meta name="csrf-token" content="<?= e(Csrf::token()) ?>">
     <meta name="robots" content="noindex">
     <title>Test checkout · Bella Vista Dining</title>
-    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261114d">
+    <link rel="stylesheet" href="/public/assets/css/app.css?v=20261120a">
 </head>
 <body class="mock-pay">
 <main class="mock-card">

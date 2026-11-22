@@ -204,12 +204,12 @@ require __DIR__ . '/../includes/header.php';
                 <p class="context-pill"><?= icon('calendar') ?><span data-context></span></p>
                 <form class="checkout-form" id="checkout-form" novalidate>
                     <div class="form-row">
-                        <label class="field"><span>First name</span><input name="first_name" required maxlength="50" autocomplete="given-name"></label>
-                        <label class="field"><span>Last name</span><input name="last_name" required maxlength="50" autocomplete="family-name"></label>
+                        <label class="field"><span>First name</span><input name="first_name" required maxlength="50" autocomplete="given-name" placeholder="Cyrus"></label>
+                        <label class="field"><span>Last name</span><input name="last_name" required maxlength="50" autocomplete="family-name" placeholder="Wilson"></label>
                     </div>
                     <div class="form-row">
                         <label class="field"><span>Mobile number</span><input name="phone_number" type="tel" required inputmode="tel" autocomplete="tel" placeholder="0917 555 0126"></label>
-                        <label class="field"><span>Email address</span><input name="email" type="email" required maxlength="100" autocomplete="email" autocapitalize="none" spellcheck="false"></label>
+                        <label class="field"><span>Email address</span><input name="email" type="email" required maxlength="100" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="your.email@gmail.com"></label>
                     </div>
 
                     <p class="label">How would you like to pay?</p>
@@ -253,5 +253,5 @@ require __DIR__ . '/../includes/header.php';
     </div>
 </main>
 <script>window.BV_RESERVE = <?= json_encode($config, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script>
-<script src="/public/assets/js/reserve.js?v=20261118c" defer></script>
+<script src="/public/assets/js/reserve.js?v=20261120a" defer></script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>
